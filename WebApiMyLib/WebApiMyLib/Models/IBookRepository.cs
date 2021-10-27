@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApiMyLib.Models
 {
-    interface IBookRepository
+   public interface IBookRepository
     {
         IEnumerable<Book> Books { get; }
         Book this[int id] { get; }

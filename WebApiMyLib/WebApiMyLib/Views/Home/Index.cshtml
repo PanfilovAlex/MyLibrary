@@ -1,0 +1,47 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model IEnumerable<Book>
+
+@{
+    Layout = "_Layout";
+}
+
+
+<form id="add-form" asp-action="AddBook" method="post">
+    <div class="form-group">
+        <label for="Title">Название</label>
+        <input class="form-control" name="Title" />
+    </div>
+    <div>
+        <label for="Autor">Автор</label>
+        <input class="form-control" name="Autor" />
+    </div>
+    <div>
+        <label for="Category">Категория</label>
+        <input class="form-control" name="Category" />
+    </div>
+    <div class="text-center panel-body">
+        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+    </div>
+</form>
+<table class="table table-sm table-striped table-bordered m-2">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Autor</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var r in Model)
+            {
+                <tr>
+                    <td>@r.BookId</td>
+                    <td>@r.Title</td>
+                    <td>@r.Autor</td>
+                    <td>@r.Category</td>
+                </tr>
+            }
+    </tbody>
+</table> 

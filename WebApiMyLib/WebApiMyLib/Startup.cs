@@ -28,6 +28,9 @@ namespace WebApiMyLib
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<BookDbContext>(
+                options => options.UseSqlServer(connString));
             services.AddSingleton<IBookRepository, MemoryRepository>();
             services.AddMvc();
         }

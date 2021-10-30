@@ -12,6 +12,7 @@ namespace WebApiMyLib.Models
         public string Title { get; set; }
         public string Category { get; set; }
         public string Autor { get; set; }
+        public bool IsDeleted { get; set; }
 
     }
 }

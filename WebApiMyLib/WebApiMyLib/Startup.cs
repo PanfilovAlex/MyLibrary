@@ -31,7 +31,7 @@ namespace WebApiMyLib
 
             
             services.AddDbContext<BookDbContext>(
-                options => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
+                options => options.UseSqlServer("DefaultConnection"));
             
             services.AddMvc();
         }

@@ -19,19 +19,13 @@ namespace WebApiMyLib.Controllers
 
         [HttpGet]
         public IEnumerable<Book> Get() => _repository.Books;
+
         [HttpGet("{id}")]
-        public Book Get(int id)
-        {
-            return _repository[id];
-        }
+        public Book Get(int id) => _repository.Find(id);
+
 
         [HttpPost]
-        public Book Post([FromBody] Book book) => _repository.AddBook(new Book
-        {
-            Autor = book.Autor,
-            Title = book.Title,
-            Category = book.Category
-        });
+        public Book Post([FromBody] Book book) => _repository.AddBook(book);
 
         [HttpPut]
         public Book Put([FromBody] Book book) => _repository.UpdateBook(book);

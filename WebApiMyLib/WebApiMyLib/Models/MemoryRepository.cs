@@ -32,6 +32,12 @@ namespace WebApiMyLib.Models
             return book;
         }
         public void DeleteBook(int id) => books.Remove(id);
+
+        public Book Find(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Book UpdateBook(Book book) => AddBook(book);
 
 

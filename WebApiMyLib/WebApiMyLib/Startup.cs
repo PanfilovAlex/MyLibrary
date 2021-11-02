@@ -31,7 +31,9 @@ namespace WebApiMyLib
 
             
             services.AddDbContext<BookDbContext>(
-                options => options.UseSqlServer("DefaultConnection"));
+                options => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
+            services.AddScoped<IBookRepository, BookRepository>();
+            
             
             services.AddMvc();
         }
@@ -50,6 +52,7 @@ namespace WebApiMyLib
                     null,
                     "{controller=Home}/{action=Index}");
             });
+            SeedData.EnsurePopulated(app);
         }
     }
 }

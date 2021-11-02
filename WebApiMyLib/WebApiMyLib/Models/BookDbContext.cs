@@ -7,6 +7,6 @@ namespace WebApiMyLib.Models
     public class BookDbContext:DbContext
     {
         public BookDbContext (DbContextOptions<BookDbContext> options) : base(options){ }
-        DbSet<Book> Books { get; set; }
+       public DbSet<Book> Books { get; set; }
     }
 }

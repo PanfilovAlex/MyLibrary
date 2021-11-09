@@ -11,7 +11,7 @@ namespace WebApiMyLib.Models
         public int BookId { get; set; }
         public string Title { get; set; }
         public string Category { get; set; }
-        public string Autor { get; set; }
+        public string Autor { get; set; } // TODO: ochepyatka here
         public bool IsDeleted { get; set; }
 
     }

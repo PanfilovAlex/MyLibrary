@@ -23,10 +23,7 @@ namespace WebApiMyLib.Models
         {
             var newBook = new Book
             {
-                Title = book.Title,
-                Autor = book.Autor,
-                Category = book.Category,
-                IsDeleted = false
+               
             };
             bookDbContext.Add(newBook);
             bookDbContext.SaveChanges();
@@ -57,12 +54,11 @@ namespace WebApiMyLib.Models
 
         public Book UpdateBook(Book book)
         {
-            var updatedBook = bookDbContext.Books.FirstOrDefault(b => b.BookId == book.BookId);
+            var updatedBook = bookDbContext.Books.FirstOrDefault();
             if (updatedBook != null)
             {
                 updatedBook.Title = book.Title;
-                updatedBook.Autor = book.Autor;
-                updatedBook.Category = book.Category;
+               
             }
             bookDbContext.SaveChanges();
             return updatedBook;

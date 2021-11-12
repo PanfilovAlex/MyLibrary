@@ -19,7 +19,24 @@ namespace WebApiMyLib.Models
         public IEnumerable<Book> Books => bookDbContext.Books
             .Where(book => !book.IsDeleted)
             .Include(c => c.Categories)
-            .ToList();
+            .Include(a => a.Autors)
+            .Select(b => new Book
+            {
+                Id = b.Id,
+                Title = b.Title,
+                IsDeleted = b.IsDeleted,
+                Categories = b.Categories.Select(c => new Category
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                }).ToList(),
+                Autors = b.Autors.Select(a => new Autor
+                {
+                    Id = a.Id,
+                    FirstName = a.FirstName,
+                    LastName = a.LastName
+                }).ToList()
+            });
         
 
         public Book AddBook(Book book)

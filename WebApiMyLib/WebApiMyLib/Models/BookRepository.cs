@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApiMyLib.Models
 {
@@ -16,7 +17,9 @@ namespace WebApiMyLib.Models
         }
 
         public IEnumerable<Book> Books => bookDbContext.Books
-            .Where(book => !book.IsDeleted).ToList();
+            .Where(book => !book.IsDeleted)
+            .Include(c => c.Categories)
+            .ToList();
         
 
         public Book AddBook(Book book)

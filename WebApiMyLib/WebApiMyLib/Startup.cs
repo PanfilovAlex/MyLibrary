@@ -14,6 +14,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApiMyLib.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using WebApiMyLib.Models.IRepository;
+using WebApiMyLib.Models.Repository;
 
 namespace WebApiMyLib
 {
@@ -33,8 +35,9 @@ namespace WebApiMyLib
 
             services.AddDbContext<BookDbContext>(
                 options => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
-            services.AddScoped<IBookRepository, BookRepository>();
-
+            services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IAutorRepository, AutorRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddControllers().AddNewtonsoftJson(options =>
            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 

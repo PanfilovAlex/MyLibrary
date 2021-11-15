@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Hosting;
 using WebApiMyLib.Models;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using WebApiMyLib.Models.IRepository;
+using WebApiMyLib.Models.Repository;
 
 namespace WebApiMyLib
 {
@@ -22,12 +25,17 @@ namespace WebApiMyLib
         public void ConfigureServices(IServiceCollection services)
         {
 
-            
+
             services.AddDbContext<BookDbContext>(
                 options => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
-            services.AddScoped<IBookRepository, BookRepository>();
-            
-            
+            services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IAutorRepository, AutorRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddControllers().AddNewtonsoftJson(options =>
+           options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
+
             services.AddMvc();
 
             // In production, the React files will be served from this directory
@@ -51,7 +59,7 @@ namespace WebApiMyLib
             //        null,
             //        "{controller=Home}/{action=Index}");
             //});
-            SeedData.EnsurePopulated(app);
+            ///SeedData.EnsurePopulated(app);
 
             // app.UseHttpsRedirection();
             app.UseSpaStaticFiles();

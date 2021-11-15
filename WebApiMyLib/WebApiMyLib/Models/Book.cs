@@ -8,11 +8,17 @@ namespace WebApiMyLib.Models
 {
     public class Book
     {
-        public int BookId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
-        public string Category { get; set; }
-        public string Autor { get; set; } // TODO: ochepyatka here
         public bool IsDeleted { get; set; }
+        public ICollection<Autor> Autors { get; set; }
+        public ICollection<Category> Categories { get; set; }
+
+        public Book()
+        {
+            Autors = new List<Autor>();
+            Categories = new List<Category>();
+        }
 
     }
 }

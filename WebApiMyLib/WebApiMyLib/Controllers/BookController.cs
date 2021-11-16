@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiMyLib.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using WebApiMyLib.Models.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApiMyLib.Controllers
 {
@@ -32,12 +33,8 @@ namespace WebApiMyLib.Controllers
         {
 
             var autorsIdDb = CheckOrCreateAutor(book);
-            var autors = new List<Autor>();
+            
 
-            foreach (var i in autorsIdDb)
-            {
-                autors.Add(_autorRepository.Autors.FirstOrDefault(a => a.Id == i));
-            }
 
 
             var newBook = new Book()
@@ -45,7 +42,7 @@ namespace WebApiMyLib.Controllers
                 Title = book.Title,
                 IsDeleted = book.IsDeleted,
                 Categories = book.Categories,
-                Autors = autors
+                
             };
 
 
@@ -73,26 +70,25 @@ namespace WebApiMyLib.Controllers
         public void Delete(int id) => _bookRepository.DeleteBook(id);
 
 
-        private IEnumerable<int> CheckOrCreateAutor(Book book)
+        private IEnumerable<Autor> CheckOrCreateAutor(Book book)
         {
+            
             var autorsFromBook = book.Autors;
-            var id = new List<int>();
+            var id = new List<Autor>();
             var checkedAutor = _autorRepository.Autors
-                   .Where(a =>
-                   a.LastName.Equals(book.Autors.FirstOrDefault().LastName, StringComparison.CurrentCultureIgnoreCase)
-                   && a.FirstName.Equals(book.Autors.FirstOrDefault().FirstName, StringComparison.CurrentCultureIgnoreCase))
-                   .ToList();
+                   .Where((a) => autorsFromBook.Select((afb) => afb.LastName).Contains(a.LastName)
+                   && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName)).ToList();
 
             foreach (var autor in autorsFromBook)
             {
-                if (autor.LastName.Equals(checkedAutor.FirstOrDefault().LastName, StringComparison.CurrentCultureIgnoreCase)
-                    && autor.FirstName.Equals(checkedAutor.FirstOrDefault().FirstName, StringComparison.CurrentCultureIgnoreCase))
+                if (checkedAutor.Select(a => a.LastName).Contains(autor.LastName) 
+                    && checkedAutor.Select(a => a.FirstName).Contains(autor.FirstName))
                 {
-                    id.Add(checkedAutor.FirstOrDefault().Id);
+                    id.Add(checkedAutor.FirstOrDefault(a => a.LastName.Equals(autor.LastName)));
                 }
                 else
                 {
-                    id.Add(_autorRepository.Add(autor).Id);
+                    id.Add(_autorRepository.Add(autor));
                 }
             }
 

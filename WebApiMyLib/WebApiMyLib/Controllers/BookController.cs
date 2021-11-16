@@ -30,24 +30,25 @@ namespace WebApiMyLib.Controllers
         [HttpPost]
         public Book Post([FromBody] Book book)
         {
-            var findAutor = book.Autors.ToArray();
+
+            var autorsIdDb = CheckOrCreateAutor(book);
+            var autors = new List<Autor>();
+
+            foreach (var i in autorsIdDb)
+            {
+                autors.Add(_autorRepository.Autors.FirstOrDefault(a => a.Id == i));
+            }
+
+
             var newBook = new Book()
             {
                 Title = book.Title,
                 IsDeleted = book.IsDeleted,
                 Categories = book.Categories,
+                Autors = autors
             };
 
-            for (int i = 0; i < findAutor.Length; i++)
-            {
-                var result = CheckAutor(findAutor[i]);
-                newBook.Autors.Add(new Autor
-                {
-                    Id = _autorRepository.Find(result).Id,
-                    FirstName = _autorRepository.Find(result).FirstName,
-                    LastName = _autorRepository.Find(result).LastName,
-                });
-            }
+
             _bookRepository.AddBook(newBook);
 
             return newBook;
@@ -71,34 +72,31 @@ namespace WebApiMyLib.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id) => _bookRepository.DeleteBook(id);
 
-        private int CheckAutor(Autor autor)
+
+        private IEnumerable<int> CheckOrCreateAutor(Book book)
         {
+            var autorsFromBook = book.Autors;
+            var id = new List<int>();
             var checkedAutor = _autorRepository.Autors
-                .FirstOrDefault(a => autor.FirstName.Equals(a.FirstName) && autor.LastName.Equals(a.LastName));
-            if (checkedAutor == null)
+                   .Where(a =>
+                   a.LastName.Equals(book.Autors.FirstOrDefault().LastName, StringComparison.CurrentCultureIgnoreCase)
+                   && a.FirstName.Equals(book.Autors.FirstOrDefault().FirstName, StringComparison.CurrentCultureIgnoreCase))
+                   .ToList();
+
+            foreach (var autor in autorsFromBook)
             {
-                _autorRepository.Add(autor);
-                checkedAutor = _autorRepository.Autors
-                .FirstOrDefault(a => autor.FirstName.Equals(a.FirstName) && autor.LastName.Equals(a.LastName));
+                if (autor.LastName.Equals(checkedAutor.FirstOrDefault().LastName, StringComparison.CurrentCultureIgnoreCase)
+                    && autor.FirstName.Equals(checkedAutor.FirstOrDefault().FirstName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    id.Add(checkedAutor.FirstOrDefault().Id);
+                }
+                else
+                {
+                    id.Add(_autorRepository.Add(autor).Id);
+                }
             }
 
-            return checkedAutor.Id;
-        }
-
-        private int CheckAutor(Book book)
-        {
-            var checkedAutor = _autorRepository.Autors
-                .FirstOrDefault(a =>
-                a.LastName.Equals(book.Autors.FirstOrDefault().LastName)
-                && a.FirstName.Equals(book.Autors.FirstOrDefault().FirstName));
-
-            if (checkedAutor == null)
-            {
-                _autorRepository.Add(checkedAutor);
-            }
-
-            return checkedAutor.Id;
-
+            return id;
         }
 
     }

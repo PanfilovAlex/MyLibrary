@@ -51,10 +51,10 @@ namespace WebApiMyLib.Models
             for (int i = 0; i < currentBookAutors.Count; i++)
             {
                 autors.Add(bookContext.Autors
-                    .FirstOrDefault(a => 
+                    .FirstOrDefault(a =>
                     a.Id == currentBookAutors[i].Id));
             }
-            for(int i = 0; i < currentBookCategory.Count; i++)
+            for (int i = 0; i < currentBookCategory.Count; i++)
             {
                 categoies.Add(bookContext.Categories
                     .FirstOrDefault(c =>
@@ -62,7 +62,7 @@ namespace WebApiMyLib.Models
             }
             newBook.Title = book.Title;
             newBook.Autors = autors;
-            newBook.Categories = categoies;           
+            newBook.Categories = categoies;
 
             bookContext.Books.Add(newBook);
             bookContext.SaveChanges();

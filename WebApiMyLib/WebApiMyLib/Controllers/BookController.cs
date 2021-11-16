@@ -32,19 +32,16 @@ namespace WebApiMyLib.Controllers
         public Book Post([FromBody] Book book)
         {
 
-            var autorsIdDb = CheckOrCreateAutor(book);
-            
-
-
+            var autorsFromDb = CheckOrCreateAutor(book);
+            //var autors = _autorRepository.Autors.Where(a => autorsFromDb.Select(ab => ab.Id).Contains(a.Id)).ToList();
 
             var newBook = new Book()
             {
                 Title = book.Title,
                 IsDeleted = book.IsDeleted,
                 Categories = book.Categories,
-                
+                Autors = autorsFromDb
             };
-
 
             _bookRepository.AddBook(newBook);
 
@@ -70,7 +67,7 @@ namespace WebApiMyLib.Controllers
         public void Delete(int id) => _bookRepository.DeleteBook(id);
 
 
-        private IEnumerable<Autor> CheckOrCreateAutor(Book book)
+        private List<Autor> CheckOrCreateAutor(Book book)
         {
             
             var autorsFromBook = book.Autors;

@@ -80,11 +80,16 @@ namespace WebApiMyLib.Models
 
         public Book UpdateBook(Book book)
         {
-            var updatedBook = bookContext.Books.FirstOrDefault();
+
+            var updatedBook = bookContext.Books.FirstOrDefault(b => b.Id == book.Id);
+            var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
+            var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
             if (updatedBook != null)
             {
                 updatedBook.Title = book.Title;
-
+                updatedBook.Autors = autors;
+                updatedBook.Categories = categoies;
+                updatedBook.IsDeleted = book.IsDeleted;
             }
             bookContext.SaveChanges();
             return updatedBook;

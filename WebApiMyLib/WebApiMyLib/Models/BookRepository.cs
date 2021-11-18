@@ -69,11 +69,7 @@ namespace WebApiMyLib.Models
 
         public Book Find(int id)
         {
-            var foundBook = bookContext.Find<Book>(id);
-            if (foundBook.IsDeleted)
-            {
-                throw new Exception("Book was not found");
-            }
+            var foundBook = bookContext.Books.Where(b => !b.IsDeleted).FirstOrDefault(b => b.Id == id);
             return foundBook;
         }
 

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace WebApiMyLib.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class BookController : ControllerBase
     {
         private IBookRepository _bookRepository;
@@ -22,16 +23,26 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Book> Get() => _bookRepository.Books;
+        public ActionResult<IEnumerable<Book>> Get() => _bookRepository.Books.ToList();
 
         [HttpGet("{id}")]
-        public Book Get(int id) => _bookRepository.Find(id);
+        public ActionResult<Book> Get(int id)
+        {
+            var book = _bookRepository.Find(id);
+            if (book == null)
+                return NotFound();
+            return Ok(book);
+        }
 
 
         [HttpPost]
-        public Book Post([FromBody] Book book)
+        public ActionResult<Book> Post([FromBody] Book book)
         {
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+           
             var autorsFromDb = CheckOrCreateAutor(book);
             //var autors = _autorRepository.Autors.Where(a => autorsFromDb.Select(ab => ab.Id).Contains(a.Id)).ToList();
 
@@ -44,24 +55,23 @@ namespace WebApiMyLib.Controllers
             };
 
             _bookRepository.AddBook(newBook);
-
-            return newBook;
+            return Ok("Book was added");
         }
 
         [HttpPut]
         public Book Put([FromBody] Book book) => _bookRepository.UpdateBook(book);
 
-        [HttpPatch("{id}")]
-        public StatusCodeResult Patch(int id, [FromBody] JsonPatchDocument<Book> patch)
-        {
-            Book book = Get(id);
-            if (book != null)
-            {
-                patch.ApplyTo(book);
-                return Ok();
-            }
-            return NotFound();
-        }
+        //[HttpPatch("{id}")]
+        //public StatusCodeResult Patch(int id, [FromBody] JsonPatchDocument<Book> patch)
+        //{
+        //    Book book = Get(id);
+        //    if (book != null)
+        //    {
+        //        patch.ApplyTo(book);
+        //        return Ok();
+        //    }
+        //    return NotFound();
+        //}
 
         [HttpDelete("{id}")]
         public void Delete(int id) => _bookRepository.DeleteBook(id);

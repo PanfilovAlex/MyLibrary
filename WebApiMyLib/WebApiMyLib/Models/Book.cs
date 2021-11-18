@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace WebApiMyLib.Models
@@ -9,6 +7,7 @@ namespace WebApiMyLib.Models
     public class Book
     {
         public int Id { get; set; }
+        [Required(ErrorMessage ="Введите название книги")]
         public string Title { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<Autor> Autors { get; set; }

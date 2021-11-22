@@ -43,27 +43,14 @@ namespace WebApiMyLib.Models
 
         public Book AddBook(Book book)
         {
-            var autors = new List<Autor>();
-            var categoies = new List<Category>();
-            var newBook = new Book();
-            var currentBookAutors = book.Autors.ToList();
-            var currentBookCategory = book.Categories.ToList();
-            for (int i = 0; i < currentBookAutors.Count; i++)
+            var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
+            var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
+            var newBook = new Book()
             {
-                autors.Add(bookContext.Autors
-                    .FirstOrDefault(a => 
-                    a.Id == currentBookAutors[i].Id));
-            }
-            for(int i = 0; i < currentBookCategory.Count; i++)
-            {
-                categoies.Add(bookContext.Categories
-                    .FirstOrDefault(c =>
-                    c.Id == currentBookCategory[i].Id));
-            }
-            newBook.Title = book.Title;
-            newBook.Autors = autors;
-            newBook.Categories = categoies;           
-
+                Title = book.Title,
+                Autors = autors,
+                Categories = categoies
+            };
             bookContext.Books.Add(newBook);
             bookContext.SaveChanges();
             return newBook;
@@ -82,22 +69,23 @@ namespace WebApiMyLib.Models
 
         public Book Find(int id)
         {
-            var foundBook = bookContext.Find<Book>(id);
-            if (foundBook.IsDeleted)
-            {
-                throw new Exception("Book was not found");
-            }
+            var foundBook = bookContext.Books.Where(b => !b.IsDeleted).FirstOrDefault(b => b.Id == id);
             return foundBook;
         }
 
 
         public Book UpdateBook(Book book)
         {
-            var updatedBook = bookContext.Books.FirstOrDefault();
+
+            var updatedBook = bookContext.Books.FirstOrDefault(b => b.Id == book.Id);
+            var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
+            var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
             if (updatedBook != null)
             {
                 updatedBook.Title = book.Title;
-
+                updatedBook.Autors = autors;
+                updatedBook.Categories = categoies;
+                updatedBook.IsDeleted = book.IsDeleted;
             }
             bookContext.SaveChanges();
             return updatedBook;

@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiMyLib.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using WebApiMyLib.Models.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApiMyLib.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class BookController : ControllerBase
     {
         private IBookRepository _bookRepository;
@@ -21,84 +23,83 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Book> Get() => _bookRepository.Books;
+        public ActionResult<IEnumerable<Book>> Get() => _bookRepository.Books.ToList();
 
         [HttpGet("{id}")]
-        public Book Get(int id) => _bookRepository.Find(id);
+        public ActionResult<Book> Get(int id)
+        {
+            var book = _bookRepository.Find(id);
+            if (book == null)
+                return NotFound();
+            return Ok(book);
+        }
 
 
         [HttpPost]
-        public Book Post([FromBody] Book book)
+        public ActionResult<Book> Post([FromBody] Book book)
         {
-            var findAutor = book.Autors.ToArray();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+           
+            var autorsFromDb = CheckOrCreateAutor(book);
+            //var autors = _autorRepository.Autors.Where(a => autorsFromDb.Select(ab => ab.Id).Contains(a.Id)).ToList();
+
             var newBook = new Book()
             {
                 Title = book.Title,
                 IsDeleted = book.IsDeleted,
                 Categories = book.Categories,
+                Autors = autorsFromDb
             };
 
-            for (int i = 0; i < findAutor.Length; i++)
-            {
-                var result = CheckAutor(findAutor[i]);
-                newBook.Autors.Add(new Autor
-                {
-                    Id = _autorRepository.Find(result).Id,
-                    FirstName = _autorRepository.Find(result).FirstName,
-                    LastName = _autorRepository.Find(result).LastName,
-                });
-            }
             _bookRepository.AddBook(newBook);
-
-            return newBook;
+            return Ok("Book was added");
         }
 
         [HttpPut]
         public Book Put([FromBody] Book book) => _bookRepository.UpdateBook(book);
 
-        [HttpPatch("{id}")]
-        public StatusCodeResult Patch(int id, [FromBody] JsonPatchDocument<Book> patch)
-        {
-            Book book = Get(id);
-            if (book != null)
-            {
-                patch.ApplyTo(book);
-                return Ok();
-            }
-            return NotFound();
-        }
+        //[HttpPatch("{id}")]
+        //public StatusCodeResult Patch(int id, [FromBody] JsonPatchDocument<Book> patch)
+        //{
+        //    Book book = Get(id);
+        //    if (book != null)
+        //    {
+        //        patch.ApplyTo(book);
+        //        return Ok();
+        //    }
+        //    return NotFound();
+        //}
 
         [HttpDelete("{id}")]
         public void Delete(int id) => _bookRepository.DeleteBook(id);
 
-        private int CheckAutor(Autor autor)
+
+        private List<Autor> CheckOrCreateAutor(Book book)
         {
+            
+            var autorsFromBook = book.Autors;
+            var id = new List<Autor>();
             var checkedAutor = _autorRepository.Autors
-                .FirstOrDefault(a => autor.FirstName.Equals(a.FirstName) && autor.LastName.Equals(a.LastName));
-            if (checkedAutor == null)
+                   .Where((a) => autorsFromBook.Select((afb) => afb.LastName).Contains(a.LastName)
+                   && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName)).ToList();
+
+            foreach (var autor in autorsFromBook)
             {
-                _autorRepository.Add(autor);
-                checkedAutor = _autorRepository.Autors
-                .FirstOrDefault(a => autor.FirstName.Equals(a.FirstName) && autor.LastName.Equals(a.LastName));
+                if (checkedAutor.Select(a => a.LastName).Contains(autor.LastName) 
+                    && checkedAutor.Select(a => a.FirstName).Contains(autor.FirstName))
+                {
+                    id.Add(checkedAutor.FirstOrDefault(a => a.LastName.Equals(autor.LastName)));
+                }
+                else
+                {
+                    id.Add(_autorRepository.Add(autor));
+                }
             }
 
-            return checkedAutor.Id;
-        }
-
-        private int CheckAutor(Book book)
-        {
-            var checkedAutor = _autorRepository.Autors
-                .FirstOrDefault(a =>
-                a.LastName.Equals(book.Autors.FirstOrDefault().LastName)
-                && a.FirstName.Equals(book.Autors.FirstOrDefault().FirstName));
-
-            if (checkedAutor == null)
-            {
-                _autorRepository.Add(checkedAutor);
-            }
-
-            return checkedAutor.Id;
-
+            return id;
         }
 
     }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApiMyLib.Models
 {
     public class Category
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage ="Введите название категории")]
         public string Name { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsChosen { get; set; }

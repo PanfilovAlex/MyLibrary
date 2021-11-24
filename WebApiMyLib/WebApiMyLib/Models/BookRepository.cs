@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Models.Repository;
 using WebApiMyLib.Models.IRepository;
+using WebApiMyLib.Controllers;
 
 namespace WebApiMyLib.Models
 {
@@ -18,7 +19,10 @@ namespace WebApiMyLib.Models
             bookContext = context;
         }
 
-        public IEnumerable<Book> Books => bookContext.Books
+        public IEnumerable<Book> GetBooks => bookContext.Books;
+        public IEnumerable<Book> Books (PageParameters pageParameters)
+        {
+           var books = bookContext.Books
             .Where(book => !book.IsDeleted)
             .Include(c => c.Categories)
             .Include(a => a.Autors)
@@ -39,8 +43,12 @@ namespace WebApiMyLib.Models
                     LastName = a.LastName
                 }).ToList()
             });
-
-
+            return books
+                .OrderBy(a => a.Id)
+                .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                .Take(pageParameters.PageSize)
+                .ToList();
+        }
         public Book AddBook(Book book)
         {
             var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
@@ -59,10 +67,6 @@ namespace WebApiMyLib.Models
         public void DeleteBook(int id)
         {
             var deletedBook = bookContext.Books.Find(id);
-            if (deletedBook is null)
-            {
-                throw new Exception("Unable to find the book!");
-            }
             bookContext.Books.Find(id).IsDeleted = true;
             bookContext.SaveChanges();
         }
@@ -73,10 +77,8 @@ namespace WebApiMyLib.Models
             return foundBook;
         }
 
-
         public Book UpdateBook(Book book)
         {
-
             var updatedBook = bookContext.Books.FirstOrDefault(b => b.Id == book.Id);
             var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
             var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
@@ -90,7 +92,5 @@ namespace WebApiMyLib.Models
             bookContext.SaveChanges();
             return updatedBook;
         }
-
-
     }
 }

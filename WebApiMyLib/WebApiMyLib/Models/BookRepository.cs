@@ -24,6 +24,7 @@ namespace WebApiMyLib.Models
         {
            var books = bookContext.Books
             .Where(book => !book.IsDeleted)
+            .OrderBy(b => b.Id)
             .Include(c => c.Categories)
             .Include(a => a.Autors)
             .Select(b => new Book
@@ -43,11 +44,7 @@ namespace WebApiMyLib.Models
                     LastName = a.LastName
                 }).ToList()
             });
-            return books
-                .OrderBy(a => a.Id)
-                .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                .Take(pageParameters.PageSize)
-                .ToList();
+            return PagedList<Book>.ToPagedList(books, pageParameters.PageNumber, pageParameters.PageSize);
         }
         public Book AddBook(Book book)
         {

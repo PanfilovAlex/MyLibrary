@@ -24,7 +24,7 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Book>> Get([FromQuery] PageParameters pageParameters) =>
+        public ActionResult<IEnumerable<Book>> Get([FromQuery] BookPageParameters pageParameters) =>
             _bookRepository.Books(pageParameters).ToList();
 
         [HttpGet("{id}")]

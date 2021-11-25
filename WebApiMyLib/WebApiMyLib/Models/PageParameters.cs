@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApiMyLib.Models
 {
-    public class PageParameters
+    public abstract class PageParameters
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;

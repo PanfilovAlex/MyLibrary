@@ -9,7 +9,7 @@ namespace WebApiMyLib.Models
     public interface IBookRepository
     {
         IEnumerable<Book> GetBooks { get; }
-        IEnumerable<Book> Books(PageParameters pageParameters);
+        IEnumerable<Book> Books(BookPageParameters pageParameters);
         Book Find(int id);
         Book AddBook(Book book);
         Book UpdateBook(Book book);

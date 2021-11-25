@@ -20,7 +20,7 @@ namespace WebApiMyLib.Models
         }
 
         public IEnumerable<Book> GetBooks => bookContext.Books;
-        public IEnumerable<Book> Books (PageParameters pageParameters)
+        public IEnumerable<Book> Books (BookPageParameters pageParameters)
         {
            var books = bookContext.Books
             .Where(book => !book.IsDeleted)
@@ -44,6 +44,9 @@ namespace WebApiMyLib.Models
                     LastName = a.LastName
                 }).ToList()
             });
+
+            SearchString(ref books, pageParameters.SearchString);
+            SortBy(ref books, pageParameters.SortBy);
             return PagedList<Book>.ToPagedList(books, pageParameters.PageNumber, pageParameters.PageSize);
         }
         public Book AddBook(Book book)
@@ -88,6 +91,33 @@ namespace WebApiMyLib.Models
             }
             bookContext.SaveChanges();
             return updatedBook;
+        }
+
+        private void SearchString(ref IQueryable<Book> books, string searchString)
+        {
+            if (!books.Any() || string.IsNullOrWhiteSpace(searchString))
+                return;
+            books = books.Where(b => b.Title.Contains(searchString)
+            || b.Autors.Select(a => a.LastName).Contains(searchString)
+            || b.Autors.Select(a => a.FirstName).Contains(searchString));
+        }
+
+        private void SortBy(ref IQueryable<Book> books, string sortBy)
+        {
+            if (!books.Any() || string.IsNullOrWhiteSpace(sortBy))
+                return;
+            switch (sortBy)
+            {
+                case "asc":
+                    books = books.OrderBy(b => b.Title);
+                    break;
+                case "desc":
+                    books = books.OrderByDescending(b => b.Title);
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Id);
+                    break;
+            }
         }
     }
 }

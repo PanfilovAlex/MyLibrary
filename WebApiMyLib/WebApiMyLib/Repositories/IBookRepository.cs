@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WebApiMyLib.Controllers;
+using WebApiMyLib.Models;
 
-namespace WebApiMyLib.Models
+namespace WebApiMyLib.Repositories
 {
     public interface IBookRepository
     {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using WebApiMyLib.Models;
 
-namespace WebApiMyLib.Models
+namespace WebApiMyLib.Repositories
 {
     public static class SeedData
     {

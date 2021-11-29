@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.DependencyInjection;
+using WebApiMyLib.Models;
 
-namespace WebApiMyLib.Models
+namespace WebApiMyLib.Repositories
 {
     public class BookDbContext : DbContext
     {

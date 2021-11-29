@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiMyLib.Models;
+using WebApiMyLib.Repositories;
 
 namespace WebApiMyLib.Migrations
 {

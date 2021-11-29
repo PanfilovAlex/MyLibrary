@@ -14,8 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApiMyLib.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using WebApiMyLib.Models.IRepository;
-using WebApiMyLib.Models.Repository;
+using WebApiMyLib.Repositories;
 
 namespace WebApiMyLib
 {
@@ -25,24 +24,16 @@ namespace WebApiMyLib
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-
-            services.AddDbContext<BookDbContext>(
-                options => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
+            services.AddDbContext<BookDbContext>(options => 
+            options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IAutorRepository, AutorRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddControllers().AddNewtonsoftJson(options =>
-           options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
-
-
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMvc();
         }
 
@@ -53,14 +44,12 @@ namespace WebApiMyLib
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     null,
                     "{controller=Home}/{action=Index}");
             });
-
         }
     }
 }

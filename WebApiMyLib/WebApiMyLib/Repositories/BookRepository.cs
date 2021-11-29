@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using WebApiMyLib.Models.Repository;
-using WebApiMyLib.Models.IRepository;
+using WebApiMyLib.Models;
 using WebApiMyLib.Controllers;
 
-namespace WebApiMyLib.Models
+namespace WebApiMyLib.Repositories
 {
     public class BookRepository : IBookRepository
     {

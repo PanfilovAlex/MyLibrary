@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace WebApiMyLib.Models
 {
     public class Book
     {
-        public int BookId { get; set; }
+        public int Id { get; set; }
+        [Required(ErrorMessage ="Введите название книги")]
         public string Title { get; set; }
-        public string Category { get; set; }
-        public string Autor { get; set; }
+        public bool IsDeleted { get; set; }
+        public ICollection<Autor> Autors { get; set; }
+        public ICollection<Category> Categories { get; set; }
+
+        public Book()
+        {
+            Autors = new List<Autor>();
+            Categories = new List<Category>();
+        }
 
     }
 }

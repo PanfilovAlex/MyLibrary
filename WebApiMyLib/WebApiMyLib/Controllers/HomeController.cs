@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApiMyLib.Models;
+using WebApiMyLib.Repositories;
 
 namespace WebApiMyLib.Controllers
 {

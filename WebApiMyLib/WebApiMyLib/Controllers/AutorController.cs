@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebApiMyLib.Models;
-using WebApiMyLib.Models.IRepository;
+using WebApiMyLib.Repositories;
+
 
 namespace WebApiMyLib.Controllers
 {

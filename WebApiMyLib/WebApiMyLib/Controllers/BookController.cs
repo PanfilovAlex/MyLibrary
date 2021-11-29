@@ -7,6 +7,7 @@ using WebApiMyLib.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using WebApiMyLib.Models.IRepository;
 using Microsoft.EntityFrameworkCore;
+using WebApiMyLib.Repositories;
 
 
 namespace WebApiMyLib.Controllers

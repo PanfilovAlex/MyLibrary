@@ -17,58 +17,18 @@ namespace WebApiMyLib.Repositories
             bookContext = context;
         }
 
-        public IEnumerable<BookDto> GetBookDtos(BookPageParameters pageParameters)
+        public IEnumerable<Book> GetBooks => bookContext.Books;
+        public IEnumerable<Book> Books(BookPageParameters pageParameters)
         {
             var books = bookContext.Books
-                .Where(book => !book.IsDeleted)
-                .Include(autor => autor.Autors)
-                .Include(category => category.Categories)
-                .Select(book => new BookDto
-                {
-                    Title = book.Title,
-                    Autors = book.Autors.Select(a => new AutorDto
-                    {
-                        FirstName = a.FirstName,
-                        LastName = a.LastName
-                    }).ToList(),
-                    Categories = book.Categories.Select(c => new CategoryDto
-                    {
-                        Name = c.Name
-                    }).ToList()
-                });
-            SearchString(ref books, pageParameters.SearchString);
-            SortBy(ref books, pageParameters.SortBy);
+             .Where(book => !book.IsDeleted)
+             .OrderBy(b => b.Id)
+             .Include(c => c.Categories)
+             .Include(a => a.Autors);
 
-            return PagedList<BookDto>.ToPagedList(books, pageParameters.PageNumber, pageParameters.PageSize);
-        }
-        public IEnumerable<Book> GetBooks => bookContext.Books;
-        public IEnumerable<Book> Books (BookPageParameters pageParameters)
-        {
-           var books = bookContext.Books
-            .Where(book => !book.IsDeleted)
-            .OrderBy(b => b.Id)
-            .Include(c => c.Categories)
-            .Include(a => a.Autors)
-            .Select(b => new Book
-            {
-                Id = b.Id,
-                Title = b.Title,
-                IsDeleted = b.IsDeleted,
-                Categories = b.Categories.Select(c => new Category
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                }).ToList(),
-                Autors = b.Autors.Select(a => new Autor
-                {
-                    Id = a.Id,
-                    FirstName = a.FirstName,
-                    LastName = a.LastName
-                }).ToList()
-            });
+            var sortedBooks = SortBy(books, pageParameters.SortBy);
+            var searchedBooks = SearchString(books, pageParameters.SearchString);
 
-            SearchString(ref books, pageParameters.SearchString);
-            SortBy(ref books, pageParameters.SortBy);
             return PagedList<Book>.ToPagedList(books, pageParameters.PageNumber, pageParameters.PageSize);
         }
         public Book AddBook(Book book)
@@ -119,19 +79,19 @@ namespace WebApiMyLib.Repositories
             return updatedBook;
         }
 
-        private void SearchString(ref IQueryable<BookDto> books, string searchString)
+        private IQueryable<Book> SearchString(IQueryable<Book> books, string searchString)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(searchString))
-                return;
-            books = books.Where(b => b.Title.Contains(searchString)
+                return books;
+            return books.Where(b => b.Title.Contains(searchString)
             || b.Autors.Select(a => a.LastName).Contains(searchString)
             || b.Autors.Select(a => a.FirstName).Contains(searchString));
         }
 
-        private void SortBy(ref IQueryable<BookDto> books, string sortBy)
+        private IQueryable<Book> SortBy(IQueryable<Book> books, string sortBy)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(sortBy))
-                return;
+                return books;
             switch (sortBy)
             {
                 case "asc":
@@ -141,35 +101,9 @@ namespace WebApiMyLib.Repositories
                     books = books.OrderByDescending(b => b.Title);
                     break;
                 default:
-                    books = books.OrderBy(b => b.Title);
                     break;
             }
-        }
-        private void SearchString(ref IQueryable<Book> books, string searchString)
-        {
-            if (!books.Any() || string.IsNullOrWhiteSpace(searchString))
-                return;
-            books = books.Where(b => b.Title.Contains(searchString)
-            || b.Autors.Select(a => a.LastName).Contains(searchString)
-            || b.Autors.Select(a => a.FirstName).Contains(searchString));
-        }
-
-        private void SortBy(ref IQueryable<Book> books, string sortBy)
-        {
-            if (!books.Any() || string.IsNullOrWhiteSpace(sortBy))
-                return;
-            switch (sortBy)
-            {
-                case "asc":
-                    books = books.OrderBy(b => b.Title);
-                    break;
-                case "desc":
-                    books = books.OrderByDescending(b => b.Title);
-                    break;
-                default:
-                    books = books.OrderBy(b => b.Id);
-                    break;
-            }
+            return books;
         }
     }
 }

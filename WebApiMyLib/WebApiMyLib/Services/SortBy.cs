@@ -7,5 +7,6 @@ namespace WebApiMyLib.Services
 {
     public class SortBy
     {
+
     }
 }

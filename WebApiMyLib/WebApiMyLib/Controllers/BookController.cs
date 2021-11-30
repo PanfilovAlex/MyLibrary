@@ -25,8 +25,23 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<BookDto>> Get([FromQuery] BookPageParameters pageParameters) =>
-            _bookRepository.GetBookDtos(pageParameters).ToList();
+        public ActionResult<IEnumerable<BookDto>> Get([FromQuery] BookPageParameters pageParameters)
+        {
+            var books = _bookRepository.Books(pageParameters).ToList();
+            return books.Select(book => new BookDto
+            {
+                Title = book.Title,
+                Autors = book.Autors.Select(autor => new AutorDto
+                {
+                    FirstName = autor.FirstName,
+                    LastName = autor.LastName
+                }).ToList(),
+                Categories = book.Categories.Select(category => new CategoryDto
+                {
+                    Name = category.Name
+                }).ToList()
+            }).ToList();
+        }
 
         [HttpGet("{id}")]
         public ActionResult<BookDto> Get(int id)
@@ -74,7 +89,7 @@ namespace WebApiMyLib.Controllers
         public ActionResult<Book> Put([FromBody] Book book)
         {
             var updatedBook = _bookRepository.UpdateBook(book);
-            if(updatedBook == null)
+            if (updatedBook == null)
             {
                 return BadRequest();
             }

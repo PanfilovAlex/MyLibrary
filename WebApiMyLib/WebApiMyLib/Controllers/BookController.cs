@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Repositories;
 
 
+
 namespace WebApiMyLib.Controllers
 {
     [Route("api/[controller]")]
@@ -24,13 +25,30 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Book>> Get([FromQuery] BookPageParameters pageParameters) =>
-            _bookRepository.Books(pageParameters).ToList();
+        public ActionResult<IEnumerable<BookDto>> Get([FromQuery] BookPageParameters pageParameters) =>
+            _bookRepository.GetBookDtos(pageParameters).ToList();
 
         [HttpGet("{id}")]
-        public ActionResult<Book> Get(int id)
-            => _bookRepository.Find(id) == null ? NotFound() :
-            Ok(_bookRepository.Find(id));
+        public ActionResult<BookDto> Get(int id)
+        {
+            var book = _bookRepository.Find(id);
+            if (book == null)
+                return NotFound();
+            BookDto bookDto = new BookDto
+            {
+                Title = book.Title,
+                Autors = book.Autors.Select(b => new AutorDto
+                {
+                    FirstName = b.FirstName,
+                    LastName = b.LastName
+                }).ToList(),
+                Categories = book.Categories.Select(c => new CategoryDto
+                {
+                    Name = c.Name
+                }).ToList()
+            };
+            return Ok(bookDto);
+        }
 
         [HttpPost]
         public ActionResult<Book> Post([FromBody] Book book)

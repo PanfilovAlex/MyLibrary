@@ -7,7 +7,7 @@ namespace WebApiMyLib.Models
     public class Book
     {
         public int Id { get; set; }
-        [Required(ErrorMessage ="Введите название книги")]
+        [Required(ErrorMessage = "Введите название книги")]
         public string Title { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<Autor> Autors { get; set; }
@@ -18,6 +18,5 @@ namespace WebApiMyLib.Models
             Autors = new List<Autor>();
             Categories = new List<Category>();
         }
-
     }
 }

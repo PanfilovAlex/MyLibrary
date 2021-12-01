@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using WebApiMyLib.Models;
-using WebApiMyLib.Controllers;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+
+namespace WebApiMyLib.Repository.Repositories
 {
     public class BookRepository : IBookRepository
     {
@@ -24,12 +24,13 @@ namespace WebApiMyLib.Repositories
              .Where(book => !book.IsDeleted)
              .OrderBy(b => b.Id)
              .Include(c => c.Categories)
-             .Include(a => a.Autors);
+             .Include(a => a.Autors)
+             .ToList();
 
-            var sortedBooks = SortBy(books, pageParameters.SortBy);
             var searchedBooks = SearchString(books, pageParameters.SearchString);
-
-            return PagedList<Book>.ToPagedList(books, pageParameters.PageNumber, pageParameters.PageSize);
+            var sortedBooks = SortBy(searchedBooks, pageParameters.SortBy).ToList();
+            
+            return PagedList<Book>.ToPagedList(sortedBooks, pageParameters.PageNumber, pageParameters.PageSize);
         }
         public Book AddBook(Book book)
         {
@@ -79,26 +80,26 @@ namespace WebApiMyLib.Repositories
             return updatedBook;
         }
 
-        private IQueryable<Book> SearchString(IQueryable<Book> books, string searchString)
+        private List<Book> SearchString(List<Book> books, string searchString)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(searchString))
                 return books;
             return books.Where(b => b.Title.Contains(searchString)
             || b.Autors.Select(a => a.LastName).Contains(searchString)
-            || b.Autors.Select(a => a.FirstName).Contains(searchString));
+            || b.Autors.Select(a => a.FirstName).Contains(searchString)).ToList();
         }
 
-        private IQueryable<Book> SortBy(IQueryable<Book> books, string sortBy)
+        private List<Book> SortBy(List<Book> books, string sortBy)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(sortBy))
                 return books;
             switch (sortBy)
             {
                 case "asc":
-                    books = books.OrderBy(b => b.Title);
+                    books = books.OrderBy(b => b.Title).ToList();
                     break;
                 case "desc":
-                    books = books.OrderByDescending(b => b.Title);
+                    books = books.OrderByDescending(b => b.Title).ToList();
                     break;
                 default:
                     break;

@@ -12,9 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using WebApiMyLib.Repositories;
+using WebApiMyLib.Repository.Repositories;
 
 namespace WebApiMyLib
 {
@@ -37,7 +37,6 @@ namespace WebApiMyLib
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseStatusCodePages();

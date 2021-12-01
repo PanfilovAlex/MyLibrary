@@ -4,6 +4,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiMyLib", "WebApiMyLib\WebApiMyLib.csproj", "{11D3132E-831E-4171-B813-650D64DE3CBD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7B8C272B-1D06-4079-B8F7-E06331C095A8} = {7B8C272B-1D06-4079-B8F7-E06331C095A8}
+		{DDE13D76-5F21-49D9-9133-F5B132DE5716} = {DDE13D76-5F21-49D9-9133-F5B132DE5716}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiMyLib.Repository", "WebApiMyLib.Repository\WebApiMyLib.Repository.csproj", "{DDE13D76-5F21-49D9-9133-F5B132DE5716}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7B8C272B-1D06-4079-B8F7-E06331C095A8} = {7B8C272B-1D06-4079-B8F7-E06331C095A8}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiMyLib.Data", "WebApiMyLib.Data.Model\WebApiMyLib.Data.csproj", "{7B8C272B-1D06-4079-B8F7-E06331C095A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +26,14 @@ Global
 		{11D3132E-831E-4171-B813-650D64DE3CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11D3132E-831E-4171-B813-650D64DE3CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11D3132E-831E-4171-B813-650D64DE3CBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDE13D76-5F21-49D9-9133-F5B132DE5716}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDE13D76-5F21-49D9-9133-F5B132DE5716}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDE13D76-5F21-49D9-9133-F5B132DE5716}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDE13D76-5F21-49D9-9133-F5B132DE5716}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B8C272B-1D06-4079-B8F7-E06331C095A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B8C272B-1D06-4079-B8F7-E06331C095A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B8C272B-1D06-4079-B8F7-E06331C095A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B8C272B-1D06-4079-B8F7-E06331C095A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

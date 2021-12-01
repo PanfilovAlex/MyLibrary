@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApiMyLib.Models;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
-using WebApiMyLib.Repositories;
+using WebApiMyLib.Data.Models;
+using WebApiMyLib.Repository.Repositories;
 
 
 

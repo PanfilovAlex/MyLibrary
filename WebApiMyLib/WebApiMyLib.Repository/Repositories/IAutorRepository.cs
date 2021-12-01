@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApiMyLib.Models;
+﻿using System.Collections.Generic;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories  
+namespace WebApiMyLib.Repository.Repositories
 {
     public interface IAutorRepository
     {
@@ -14,7 +11,5 @@ namespace WebApiMyLib.Repositories
         public Autor Add(Autor autor);
         public Autor Update(Autor autor);
         public void Delete(int id);
-
-
     }
 }

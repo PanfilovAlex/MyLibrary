@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Repository.Repositories
 {
     public static class SeedData
     {

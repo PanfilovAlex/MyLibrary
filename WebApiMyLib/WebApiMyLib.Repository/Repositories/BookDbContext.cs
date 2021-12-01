@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Repository.Repositories
 {
     public class BookDbContext : DbContext
     {

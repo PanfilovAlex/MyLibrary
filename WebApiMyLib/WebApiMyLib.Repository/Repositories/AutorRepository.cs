@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Repository.Repositories
 {
     public class AutorRepository : IAutorRepository
     {

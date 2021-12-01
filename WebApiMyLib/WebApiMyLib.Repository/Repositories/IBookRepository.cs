@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using WebApiMyLib.Controllers;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Repository.Repositories
 {
     public interface IBookRepository
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Repository.Repositories
 {
     public interface ICategoryRepository
     {

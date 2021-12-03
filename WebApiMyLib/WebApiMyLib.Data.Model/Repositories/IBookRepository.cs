@@ -5,7 +5,6 @@ namespace WebApiMyLib.Data.Repositories
 {
     public interface IBookRepository
     {
-        
         IEnumerable<Book> GetBooks { get; }
         IEnumerable<Book> Books(BookPageParameters pageParameters);
         Book Find(int id);

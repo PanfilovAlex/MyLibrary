@@ -13,6 +13,5 @@ namespace WebApiMyLib.Data.Repositories
         void DeleteCategory(int id);
 
         int CheckCategory(Category category);
-
     }
 }

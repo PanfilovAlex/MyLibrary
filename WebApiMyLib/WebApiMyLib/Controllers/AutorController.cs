@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Data.Models;
 
-
 namespace WebApiMyLib.Controllers
 {
     [Route("api/autors")]

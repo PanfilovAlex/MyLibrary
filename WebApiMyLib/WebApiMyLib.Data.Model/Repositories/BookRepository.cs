@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Data.Models;
 
-
 namespace WebApiMyLib.Data.Repositories
 {
     public class BookRepository : IBookRepository

@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
 
-
-
 namespace WebApiMyLib.Controllers
 {
     [Route("api/[controller]")]

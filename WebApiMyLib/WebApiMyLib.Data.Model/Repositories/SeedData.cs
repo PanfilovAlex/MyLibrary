@@ -11,7 +11,6 @@ namespace WebApiMyLib.Data.Repositories
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-
             using (var bookDbContext = new BookDbContext(
                serviceProvider.GetRequiredService<
                    DbContextOptions<BookDbContext>>()))

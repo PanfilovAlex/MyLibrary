@@ -8,22 +8,22 @@ using WebApiMyLib.Data.Models;
 namespace WebApiMyLib.Controllers
 {
     [Route("api/autors")]
-    public class AutorController : ControllerBase
+    public class AuthorController : ControllerBase
     {
         private IAutorRepository _autorRepository;
 
-        public AutorController(IAutorRepository repository) => _autorRepository = repository;
+        public AuthorController(IAutorRepository repository) => _autorRepository = repository;
 
         [HttpGet]
-        public ActionResult<IEnumerable<Autor>> Get(PageParameters pageParameters)
+        public ActionResult<IEnumerable<Author>> Get(PageParameters pageParameters)
            => _autorRepository.Autors(pageParameters).ToList();
 
         [HttpGet("{id}")]
-        public ActionResult<Autor> Get(int id) =>
+        public ActionResult<Author> Get(int id) =>
             (_autorRepository.Find(id) == null) ? NotFound() : Ok(_autorRepository.Find(id));
 
         [HttpPost]
-        public ActionResult<Autor> Post(Autor autor)
+        public ActionResult<Author> Post(Author autor)
         {
             var updatedAutor = _autorRepository.Add(autor);
             if (updatedAutor == null)

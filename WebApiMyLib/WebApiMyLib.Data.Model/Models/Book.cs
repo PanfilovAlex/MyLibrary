@@ -9,12 +9,12 @@ namespace WebApiMyLib.Data.Models
         [Required(ErrorMessage = "Введите название книги")]
         public string Title { get; set; }
         public bool IsDeleted { get; set; }
-        public ICollection<Autor> Autors { get; set; }
+        public ICollection<Author> Authors { get; set; }
         public ICollection<Category> Categories { get; set; }
 
         public Book()
         {
-            Autors = new List<Autor>();
+            Authors = new List<Author>();
             Categories = new List<Category>();
         }
     }

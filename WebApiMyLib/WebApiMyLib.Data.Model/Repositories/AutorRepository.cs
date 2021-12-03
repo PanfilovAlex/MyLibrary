@@ -10,16 +10,16 @@ namespace WebApiMyLib.Data.Repositories
 
         public AutorRepository(BookDbContext context) => _autorContext = context;
 
-        public IEnumerable<Autor> GetAutors => _autorContext.Autors;
-        public IEnumerable<Autor> Autors(PageParameters pageParameters)
+        public IEnumerable<Author> GetAutors => _autorContext.Authors;
+        public IEnumerable<Author> Autors(PageParameters pageParameters)
         {
-            return _autorContext.Autors.OrderBy(a => a.Id)
+            return _autorContext.Authors.OrderBy(a => a.Id)
                  .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                  .Take(pageParameters.PageSize);
         }
-        public Autor Add(Autor autor)
+        public Author Add(Author autor)
         {
-            var addedAutor = new Autor
+            var addedAutor = new Author
             {
                 FirstName = autor.FirstName,
                 LastName = autor.LastName
@@ -31,16 +31,16 @@ namespace WebApiMyLib.Data.Repositories
 
         public void Delete(int id)
         {
-            var deletedAutro = _autorContext.Autors.Find(id);
+            var deletedAutro = _autorContext.Authors.Find(id);
             deletedAutro.IsDeleted = true;
             _autorContext.SaveChanges();
         }
 
-        public Autor Find(int id) => _autorContext.Autors.FirstOrDefault(a => a.Id == id);
+        public Author Find(int id) => _autorContext.Authors.FirstOrDefault(a => a.Id == id);
 
-        public Autor Update(Autor autor)
+        public Author Update(Author autor)
         {
-            var updatedAutor = _autorContext.Autors.FirstOrDefault(a => a.Id == autor.Id);
+            var updatedAutor = _autorContext.Authors.FirstOrDefault(a => a.Id == autor.Id);
             if (updatedAutor != null)
             {
                 updatedAutor.FirstName = autor.FirstName;

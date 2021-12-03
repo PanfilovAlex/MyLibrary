@@ -5,11 +5,11 @@ namespace WebApiMyLib.Data.Repositories
 {
     public interface IAutorRepository
     {
-        IEnumerable<Autor> GetAutors { get; }
-        IEnumerable<Autor> Autors(PageParameters pageParameters);
-        public Autor Find(int id);
-        public Autor Add(Autor autor);
-        public Autor Update(Autor autor);
+        IEnumerable<Author> GetAutors { get; }
+        IEnumerable<Author> Autors(PageParameters pageParameters);
+        public Author Find(int id);
+        public Author Add(Author autor);
+        public Author Update(Author autor);
         public void Delete(int id);
     }
 }

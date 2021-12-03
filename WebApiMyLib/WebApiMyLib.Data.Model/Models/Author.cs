@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApiMyLib.Data.Models
 {
-    public class Autor
+    public class Author
     {
         public int Id { get; set; }
 
@@ -18,7 +18,7 @@ namespace WebApiMyLib.Data.Models
         public ICollection<Book> Books { get; set; }
         public bool IsDeleted { get; set; }
 
-        public Autor()
+        public Author()
         {
             Books = new List<Book>();
         }

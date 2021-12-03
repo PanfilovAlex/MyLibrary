@@ -27,19 +27,7 @@ namespace WebApiMyLib.Controllers
         public ActionResult<IEnumerable<BookDto>> Get([FromQuery] BookPageParameters pageParameters)
         {
             var books = _bookRepository.Books(pageParameters).ToList();
-            return books.Select(book => new BookDto
-            {
-                Title = book.Title,
-                Autors = book.Autors.Select(autor => new AutorDto
-                {
-                    FirstName = autor.FirstName,
-                    LastName = autor.LastName
-                }).ToList(),
-                Categories = book.Categories.Select(category => new CategoryDto
-                {
-                    Name = category.Name
-                }).ToList()
-            }).ToList();
+            return books.Select(book => ConvertToBookDto(book)).ToList();
         }
 
         [HttpGet("{id}")]
@@ -48,19 +36,7 @@ namespace WebApiMyLib.Controllers
             var book = _bookRepository.Find(id);
             if (book == null)
                 return NotFound();
-            BookDto bookDto = new BookDto
-            {
-                Title = book.Title,
-                Autors = book.Autors.Select(b => new AutorDto
-                {
-                    FirstName = b.FirstName,
-                    LastName = b.LastName
-                }).ToList(),
-                Categories = book.Categories.Select(c => new CategoryDto
-                {
-                    Name = c.Name
-                }).ToList()
-            };
+            var bookDto = ConvertToBookDto(book);
             return Ok(bookDto);
         }
 
@@ -77,7 +53,7 @@ namespace WebApiMyLib.Controllers
                 Title = book.Title,
                 IsDeleted = book.IsDeleted,
                 Categories = book.Categories,
-                Autors = autorsFromDb
+                Authors = autorsFromDb
             };
             //требует рефакторнига - выглядит убого
             _bookRepository.AddBook(newBook);
@@ -107,10 +83,10 @@ namespace WebApiMyLib.Controllers
             return Ok("Book was deleted");
         }
 
-        private List<Autor> CheckOrCreateAutor(Book book)
+        private List<Author> CheckOrCreateAutor(Book book)
         {
-            var autorsFromBook = book.Autors;
-            var existingAuthorIds = new List<Autor>();
+            var autorsFromBook = book.Authors;
+            var existingAuthorIds = new List<Author>();
             var checkedAutor = _autorRepository.GetAutors
                    .Where((a) => autorsFromBook.Select((afb) => afb.LastName).Contains(a.LastName)
                    && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName)).ToList();
@@ -127,6 +103,24 @@ namespace WebApiMyLib.Controllers
                 }
             }
             return existingAuthorIds;
+        }
+
+        private BookDto ConvertToBookDto(Book book)
+        {
+            var bookDto = new BookDto
+            {
+                Title = book.Title,
+                Authors = book.Authors.Select(b => new AuthorDto
+                {
+                    FirstName = b.FirstName,
+                    LastName = b.LastName
+                }).ToList(),
+                Categories = book.Categories.Select(c => new CategoryDto
+                {
+                    Name = c.Name
+                }).ToList()
+            };
+            return bookDto;
         }
     }
 }

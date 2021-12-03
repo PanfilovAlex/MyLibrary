@@ -24,22 +24,21 @@ namespace WebApiMyLib.Data.Repositories
              .Where(book => !book.IsDeleted)
              .OrderBy(b => b.Id)
              .Include(c => c.Categories)
-             .Include(a => a.Autors)
-             .ToList();
+             .Include(a => a.Authors);
 
-            var searchedBooks = SearchString(books, pageParameters.SearchString);
-            var sortedBooks = SortBy(searchedBooks, pageParameters.SortBy).ToList();
-            
+            var searchedBooks = ApplySearchString(books, pageParameters.SearchString);
+            var sortedBooks = SortBy(searchedBooks, pageParameters.SortBy);
+
             return PagedList<Book>.ToPagedList(sortedBooks, pageParameters.PageNumber, pageParameters.PageSize);
         }
         public Book AddBook(Book book)
         {
-            var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
+            var autors = bookContext.Authors.Where(a => book.Authors.Select(bId => bId.Id).Contains(a.Id)).ToList();
             var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
             var newBook = new Book()
             {
                 Title = book.Title,
-                Autors = autors,
+                Authors = autors,
                 Categories = categoies
             };
             bookContext.Books.Add(newBook);
@@ -58,7 +57,7 @@ namespace WebApiMyLib.Data.Repositories
         {
             var foundBook = bookContext.Books
                 .Where(b => !b.IsDeleted)
-                .Include(a => a.Autors)
+                .Include(a => a.Authors)
                 .Include(c => c.Categories)
                 .FirstOrDefault(b => b.Id == id);
             return foundBook;
@@ -67,12 +66,12 @@ namespace WebApiMyLib.Data.Repositories
         public Book UpdateBook(Book book)
         {
             var updatedBook = bookContext.Books.FirstOrDefault(b => b.Id == book.Id);
-            var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
+            var autors = bookContext.Authors.Where(a => book.Authors.Select(bId => bId.Id).Contains(a.Id)).ToList();
             var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
             if (updatedBook != null)
             {
                 updatedBook.Title = book.Title;
-                updatedBook.Autors = autors;
+                updatedBook.Authors = autors;
                 updatedBook.Categories = categoies;
                 updatedBook.IsDeleted = book.IsDeleted;
             }
@@ -80,26 +79,32 @@ namespace WebApiMyLib.Data.Repositories
             return updatedBook;
         }
 
-        private List<Book> SearchString(List<Book> books, string searchString)
+        private IQueryable<Book> ApplySearchString(IQueryable<Book> books, string searchString)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(searchString))
+            {
                 return books;
+            }
+
             return books.Where(b => b.Title.Contains(searchString)
-            || b.Autors.Select(a => a.LastName).Contains(searchString)
-            || b.Autors.Select(a => a.FirstName).Contains(searchString)).ToList();
+            || b.Authors.Select(a => a.LastName).Contains(searchString)
+            || b.Authors.Select(a => a.FirstName).Contains(searchString));
         }
 
-        private List<Book> SortBy(List<Book> books, string sortBy)
+        private IQueryable<Book> SortBy(IQueryable<Book> books, string sortBy)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(sortBy))
-                return books;
+            { 
+                return books; 
+            }
+
             switch (sortBy)
             {
                 case "asc":
-                    books = books.OrderBy(b => b.Title).ToList();
+                    books = books.OrderBy(b => b.Title);
                     break;
                 case "desc":
-                    books = books.OrderByDescending(b => b.Title).ToList();
+                    books = books.OrderByDescending(b => b.Title);
                     break;
                 default:
                     break;

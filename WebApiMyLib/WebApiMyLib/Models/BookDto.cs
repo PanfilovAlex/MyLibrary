@@ -8,11 +8,11 @@ namespace WebApiMyLib.Models
     public class BookDto
     {
         public string Title { get; set; }
-        public ICollection<AutorDto> Autors { get; set; }
+        public ICollection<AuthorDto> Authors { get; set; }
         public ICollection<CategoryDto> Categories { get; set; }
         public BookDto()
         {
-            Autors = new List<AutorDto>();
+            Authors = new List<AuthorDto>();
             Categories = new List<CategoryDto>();
         }
     }

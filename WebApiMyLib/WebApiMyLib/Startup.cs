@@ -27,8 +27,9 @@ namespace WebApiMyLib
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<BookDbContext>(options => 
-            options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
+            options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebApiMyLib")));
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IAutorRepository, AutorRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();

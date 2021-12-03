@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebApiMyLib.Data.Model\WebApiMyLib.Data.csproj" />
-    <ProjectReference Include="..\WebApiMyLib.Repository\WebApiMyLib.Repository.csproj" />
   </ItemGroup>
 
 </Project>

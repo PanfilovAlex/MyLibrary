@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiMyLib.Models;
 using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Data.Models;
-using WebApiMyLib.Repository.Repositories;
+using WebApiMyLib.Data.Repositories;
 
 
 

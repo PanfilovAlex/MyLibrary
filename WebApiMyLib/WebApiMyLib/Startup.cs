@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApiMyLib.Data.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using WebApiMyLib.Repository.Repositories;
+using WebApiMyLib.Data.Repositories;
 
 namespace WebApiMyLib
 {

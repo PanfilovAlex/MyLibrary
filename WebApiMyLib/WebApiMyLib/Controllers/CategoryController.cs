@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using WebApiMyLib.Repository.Repositories;
+using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Data.Models;
 
 namespace WebApiMyLib.Controllers

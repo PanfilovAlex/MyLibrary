@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Repositories;
+using WebApiMyLib.Data.Models;
 
 namespace WebApiMyLib.Controllers
 {
@@ -12,7 +9,7 @@ namespace WebApiMyLib.Controllers
         private IBookRepository _repository { get; set; }
 
         public HomeController(IBookRepository bookRepository) => _repository = bookRepository;
-        public ViewResult Index() => View(_repository.Books);
+        public ViewResult Index() => View(_repository.GetBooks);
         [HttpPost]
         public IActionResult AddBook(Book book)
         {

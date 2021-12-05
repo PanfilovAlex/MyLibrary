@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Hosting;
 using WebApiMyLib.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using WebApiMyLib.Models.IRepository;
-using WebApiMyLib.Models.Repository;
+using WebApiMyLib.Data.Repositories;
 
 namespace WebApiMyLib
 {
@@ -18,24 +17,17 @@ namespace WebApiMyLib
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-
-            services.AddDbContext<BookDbContext>(
-                options => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<BookDbContext>(options => 
+            options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebApiMyLib")));
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IAutorRepository, AutorRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddControllers().AddNewtonsoftJson(options =>
-           options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
-
-
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMvc();
 
             // In production, the React files will be served from this directory
@@ -45,7 +37,6 @@ namespace WebApiMyLib
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseStatusCodePages();

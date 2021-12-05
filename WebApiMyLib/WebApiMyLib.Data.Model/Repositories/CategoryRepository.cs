@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using WebApiMyLib.Models.IRepository;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Models.Repository
+namespace WebApiMyLib.Data.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {

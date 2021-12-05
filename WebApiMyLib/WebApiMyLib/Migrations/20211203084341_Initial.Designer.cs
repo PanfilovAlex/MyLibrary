@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Repositories;
 
 namespace WebApiMyLib.Migrations
 {
     [DbContext(typeof(BookDbContext))]
-    [Migration("20211112072315_Initial")]
+    [Migration("20211203084341_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,19 +20,19 @@ namespace WebApiMyLib.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("AutorBook", b =>
+            modelBuilder.Entity("AuthorBook", b =>
                 {
-                    b.Property<int>("AutorsId")
+                    b.Property<int>("AuthorsId")
                         .HasColumnType("int");
 
                     b.Property<int>("BooksId")
                         .HasColumnType("int");
 
-                    b.HasKey("AutorsId", "BooksId");
+                    b.HasKey("AuthorsId", "BooksId");
 
                     b.HasIndex("BooksId");
 
-                    b.ToTable("AutorBook");
+                    b.ToTable("AuthorBook");
                 });
 
             modelBuilder.Entity("BookCategory", b =>
@@ -50,7 +50,7 @@ namespace WebApiMyLib.Migrations
                     b.ToTable("BookCategory");
                 });
 
-            modelBuilder.Entity("WebApiMyLib.Models.Autor", b =>
+            modelBuilder.Entity("WebApiMyLib.Data.Models.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,20 +58,24 @@ namespace WebApiMyLib.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Autors");
+                    b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("WebApiMyLib.Models.Book", b =>
+            modelBuilder.Entity("WebApiMyLib.Data.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,6 +86,7 @@ namespace WebApiMyLib.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -89,7 +94,7 @@ namespace WebApiMyLib.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("WebApiMyLib.Models.Category", b =>
+            modelBuilder.Entity("WebApiMyLib.Data.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,6 +108,7 @@ namespace WebApiMyLib.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -110,15 +116,15 @@ namespace WebApiMyLib.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("AutorBook", b =>
+            modelBuilder.Entity("AuthorBook", b =>
                 {
-                    b.HasOne("WebApiMyLib.Models.Autor", null)
+                    b.HasOne("WebApiMyLib.Data.Models.Author", null)
                         .WithMany()
-                        .HasForeignKey("AutorsId")
+                        .HasForeignKey("AuthorsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApiMyLib.Models.Book", null)
+                    b.HasOne("WebApiMyLib.Data.Models.Book", null)
                         .WithMany()
                         .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -127,13 +133,13 @@ namespace WebApiMyLib.Migrations
 
             modelBuilder.Entity("BookCategory", b =>
                 {
-                    b.HasOne("WebApiMyLib.Models.Book", null)
+                    b.HasOne("WebApiMyLib.Data.Models.Book", null)
                         .WithMany()
                         .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApiMyLib.Models.Category", null)
+                    b.HasOne("WebApiMyLib.Data.Models.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)

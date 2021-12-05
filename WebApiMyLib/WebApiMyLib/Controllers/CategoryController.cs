@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using WebApiMyLib.Models.IRepository;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Repositories;
+using WebApiMyLib.Data.Models;
 
 namespace WebApiMyLib.Controllers
 {
@@ -25,9 +22,5 @@ namespace WebApiMyLib.Controllers
 
         [HttpPost]
         public Category Post([FromBody]Category category) => _bdCategories.AddCategory(category);
-
-
-
-
     }
 }

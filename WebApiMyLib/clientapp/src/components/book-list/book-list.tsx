@@ -46,6 +46,7 @@ export function BookList(): JSX.Element {
     };
 
     const handleCreateButtonClick = () => {
+        setBookForEditing(undefined);
         setIsEditorOpened(true);
     };
 

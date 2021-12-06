@@ -111,6 +111,7 @@ namespace WebApiMyLib.Controllers
                 Title = book.Title,
                 Authors = book.Authors.Select(b => new AuthorDto
                 {
+                    Id = b.Id,
                     FirstName = b.FirstName,
                     LastName = b.LastName
                 }).ToList(),

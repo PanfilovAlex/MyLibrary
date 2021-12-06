@@ -11,11 +11,13 @@ namespace WebApiMyLib.Data.Repositories
         public AutorRepository(BookDbContext context) => _autorContext = context;
 
         public IEnumerable<Author> GetAutors => _autorContext.Authors;
-        public IEnumerable<Author> Autors(PageParameters pageParameters)
+        public PagedList<Author> Autors(PageParameters pageParameters)
         {
-            return _autorContext.Authors.OrderBy(a => a.Id)
+            var authors = _autorContext.Authors.OrderBy(a => a.Id)
                  .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                  .Take(pageParameters.PageSize);
+
+            return PagedList<Author>.ToPagedList(authors, pageParameters.PageNumber, pageParameters.PageSize);
         }
         public Author Add(Author autor)
         {

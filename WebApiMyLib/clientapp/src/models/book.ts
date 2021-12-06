@@ -1,7 +1,9 @@
+import { Author } from './author';
+import { Category } from './category';
+
 export type Book = {
-    bookId: number,
+    id?: number,
     title: string,
-    autor: string, // TODO: fix ochepyatka
-    category: string, // TODO: replace with id
-    //authors: number[],
+    authors: Author[],
+    categories: Category[],
 };

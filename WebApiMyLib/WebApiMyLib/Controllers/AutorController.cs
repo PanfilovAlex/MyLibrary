@@ -3,10 +3,11 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Data.Models;
+using WebApiMyLib.Models;
 
 namespace WebApiMyLib.Controllers
 {
-    [Route("api/autors")]
+    [Route("api/[controller]")]
     public class AuthorController : ControllerBase
     {
         private IAutorRepository _autorRepository;
@@ -14,8 +15,11 @@ namespace WebApiMyLib.Controllers
         public AuthorController(IAutorRepository repository) => _autorRepository = repository;
 
         [HttpGet]
-        public ActionResult<IEnumerable<Author>> Get(PageParameters pageParameters)
-           => _autorRepository.Autors(pageParameters).ToList();
+        public ActionResult<PagedListDto<AuthorDto>> Get(PageParameters pageParameters = null)
+        {
+            var authors = _autorRepository.Autors(pageParameters);
+            return new PagedListDto<AuthorDto>(authors.Select((author) => ConvertToDto(author)).ToList(), authors.TotalCount);
+        }
 
         [HttpGet("{id}")]
         public ActionResult<Author> Get(int id) =>
@@ -41,6 +45,16 @@ namespace WebApiMyLib.Controllers
             }
             _autorRepository.Delete(id);
             return Ok();
+        }
+
+        private AuthorDto ConvertToDto(Author author)
+        {
+            return new AuthorDto
+            {
+                Id = author.Id,
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+            };
         }
     }
 }

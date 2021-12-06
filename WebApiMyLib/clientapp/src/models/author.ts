@@ -1,6 +1,8 @@
+import { Book } from "./book";
+
 export type Author = {
-    authorId: number,
+    id?: number,
     firstName: string,
     lastName: string,
-    //books: number[],
+    books: Book[],
 };

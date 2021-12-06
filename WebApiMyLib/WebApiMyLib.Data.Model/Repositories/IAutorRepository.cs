@@ -6,7 +6,7 @@ namespace WebApiMyLib.Data.Repositories
     public interface IAutorRepository
     {
         IEnumerable<Author> GetAutors { get; }
-        IEnumerable<Author> Autors(PageParameters pageParameters);
+        PagedList<Author> Autors(PageParameters pageParameters);
         public Author Find(int id);
         public Author Add(Author autor);
         public Author Update(Author autor);

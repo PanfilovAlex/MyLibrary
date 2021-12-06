@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApiMyLib.Models
+namespace WebApiMyLib.Data.Models
 {
     public class Category
     {

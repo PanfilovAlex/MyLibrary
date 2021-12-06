@@ -7,18 +7,18 @@ namespace WebApiMyLib.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Autors",
+                name: "Authors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Autors", x => x.Id);
+                    table.PrimaryKey("PK_Authors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -27,7 +27,7 @@ namespace WebApiMyLib.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -41,7 +41,7 @@ namespace WebApiMyLib.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsChosen = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -51,23 +51,23 @@ namespace WebApiMyLib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AutorBook",
+                name: "AuthorBook",
                 columns: table => new
                 {
-                    AutorsId = table.Column<int>(type: "int", nullable: false),
+                    AuthorsId = table.Column<int>(type: "int", nullable: false),
                     BooksId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AutorBook", x => new { x.AutorsId, x.BooksId });
+                    table.PrimaryKey("PK_AuthorBook", x => new { x.AuthorsId, x.BooksId });
                     table.ForeignKey(
-                        name: "FK_AutorBook_Autors_AutorsId",
-                        column: x => x.AutorsId,
-                        principalTable: "Autors",
+                        name: "FK_AuthorBook_Authors_AuthorsId",
+                        column: x => x.AuthorsId,
+                        principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AutorBook_Books_BooksId",
+                        name: "FK_AuthorBook_Books_BooksId",
                         column: x => x.BooksId,
                         principalTable: "Books",
                         principalColumn: "Id",
@@ -99,8 +99,8 @@ namespace WebApiMyLib.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AutorBook_BooksId",
-                table: "AutorBook",
+                name: "IX_AuthorBook_BooksId",
+                table: "AuthorBook",
                 column: "BooksId");
 
             migrationBuilder.CreateIndex(
@@ -112,13 +112,13 @@ namespace WebApiMyLib.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AutorBook");
+                name: "AuthorBook");
 
             migrationBuilder.DropTable(
                 name: "BookCategory");
 
             migrationBuilder.DropTable(
-                name: "Autors");
+                name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "Books");

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using WebApiMyLib.Models;
-using WebApiMyLib.Controllers;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Data.Repositories
 {
     public class BookRepository : IBookRepository
     {
@@ -18,43 +17,27 @@ namespace WebApiMyLib.Repositories
         }
 
         public IEnumerable<Book> GetBooks => bookContext.Books;
-        public IEnumerable<Book> Books (BookPageParameters pageParameters)
+        public IEnumerable<Book> Books(BookPageParameters pageParameters)
         {
-           var books = bookContext.Books
-            .Where(book => !book.IsDeleted)
-            .OrderBy(b => b.Id)
-            .Include(c => c.Categories)
-            .Include(a => a.Autors)
-            .Select(b => new Book
-            {
-                Id = b.Id,
-                Title = b.Title,
-                IsDeleted = b.IsDeleted,
-                Categories = b.Categories.Select(c => new Category
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                }).ToList(),
-                Autors = b.Autors.Select(a => new Autor
-                {
-                    Id = a.Id,
-                    FirstName = a.FirstName,
-                    LastName = a.LastName
-                }).ToList()
-            });
+            var books = bookContext.Books
+             .Where(book => !book.IsDeleted)
+             .OrderBy(b => b.Id)
+             .Include(c => c.Categories)
+             .Include(a => a.Authors);
 
-            SearchString(ref books, pageParameters.SearchString);
-            SortBy(ref books, pageParameters.SortBy);
-            return PagedList<Book>.ToPagedList(books, pageParameters.PageNumber, pageParameters.PageSize);
+            var searchedBooks = ApplySearchString(books, pageParameters.SearchString);
+            var sortedBooks = SortBy(searchedBooks, pageParameters.SortBy);
+
+            return PagedList<Book>.ToPagedList(sortedBooks, pageParameters.PageNumber, pageParameters.PageSize);
         }
         public Book AddBook(Book book)
         {
-            var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
+            var autors = bookContext.Authors.Where(a => book.Authors.Select(bId => bId.Id).Contains(a.Id)).ToList();
             var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
             var newBook = new Book()
             {
                 Title = book.Title,
-                Autors = autors,
+                Authors = autors,
                 Categories = categoies
             };
             bookContext.Books.Add(newBook);
@@ -71,19 +54,23 @@ namespace WebApiMyLib.Repositories
 
         public Book Find(int id)
         {
-            var foundBook = bookContext.Books.Where(b => !b.IsDeleted).FirstOrDefault(b => b.Id == id);
+            var foundBook = bookContext.Books
+                .Where(b => !b.IsDeleted)
+                .Include(a => a.Authors)
+                .Include(c => c.Categories)
+                .FirstOrDefault(b => b.Id == id);
             return foundBook;
         }
 
         public Book UpdateBook(Book book)
         {
             var updatedBook = bookContext.Books.FirstOrDefault(b => b.Id == book.Id);
-            var autors = bookContext.Autors.Where(a => book.Autors.Select(bId => bId.Id).Contains(a.Id)).ToList();
+            var autors = bookContext.Authors.Where(a => book.Authors.Select(bId => bId.Id).Contains(a.Id)).ToList();
             var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
             if (updatedBook != null)
             {
                 updatedBook.Title = book.Title;
-                updatedBook.Autors = autors;
+                updatedBook.Authors = autors;
                 updatedBook.Categories = categoies;
                 updatedBook.IsDeleted = book.IsDeleted;
             }
@@ -91,19 +78,25 @@ namespace WebApiMyLib.Repositories
             return updatedBook;
         }
 
-        private void SearchString(ref IQueryable<Book> books, string searchString)
+        private IQueryable<Book> ApplySearchString(IQueryable<Book> books, string searchString)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(searchString))
-                return;
-            books = books.Where(b => b.Title.Contains(searchString)
-            || b.Autors.Select(a => a.LastName).Contains(searchString)
-            || b.Autors.Select(a => a.FirstName).Contains(searchString));
+            {
+                return books;
+            }
+
+            return books.Where(b => b.Title.Contains(searchString)
+            || b.Authors.Select(a => a.LastName).Contains(searchString)
+            || b.Authors.Select(a => a.FirstName).Contains(searchString));
         }
 
-        private void SortBy(ref IQueryable<Book> books, string sortBy)
+        private IQueryable<Book> SortBy(IQueryable<Book> books, string sortBy)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(sortBy))
-                return;
+            { 
+                return books; 
+            }
+
             switch (sortBy)
             {
                 case "asc":
@@ -113,9 +106,9 @@ namespace WebApiMyLib.Repositories
                     books = books.OrderByDescending(b => b.Title);
                     break;
                 default:
-                    books = books.OrderBy(b => b.Id);
                     break;
             }
+            return books;
         }
     }
 }

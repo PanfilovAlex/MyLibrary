@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace WebApiMyLib.Models
+namespace WebApiMyLib.Data.Models
 {
     public class PagedList<T> : List<T>
     {

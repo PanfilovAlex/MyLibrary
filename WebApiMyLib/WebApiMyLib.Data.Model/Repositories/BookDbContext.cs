@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Data.Repositories
 {
     public class BookDbContext : DbContext
     {
         public BookDbContext(DbContextOptions<BookDbContext> options) : base(options) { }
         public DbSet<Book> Books { get; set; }
-        public DbSet<Autor> Autors { get; set; }
+        public DbSet<Author> Authors { get; set; }
         public DbSet<Category> Categories { get; set; }
     }
 }

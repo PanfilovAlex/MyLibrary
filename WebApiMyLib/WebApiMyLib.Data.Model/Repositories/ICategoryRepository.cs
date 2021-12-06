@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Data.Repositories
 {
     public interface ICategoryRepository
     {
@@ -13,6 +13,5 @@ namespace WebApiMyLib.Repositories
         void DeleteCategory(int id);
 
         int CheckCategory(Category category);
-
     }
 }

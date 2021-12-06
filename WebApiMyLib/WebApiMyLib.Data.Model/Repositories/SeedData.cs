@@ -3,15 +3,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.Repositories
+namespace WebApiMyLib.Data.Repositories
 {
     public static class SeedData
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-
             using (var bookDbContext = new BookDbContext(
                serviceProvider.GetRequiredService<
                    DbContextOptions<BookDbContext>>()))
@@ -21,14 +20,14 @@ namespace WebApiMyLib.Repositories
                 {
                     return;   // DB has been seeded
                 }
-                Autor autor1 = new Autor { FirstName = "Адам", LastName = "Фримен" };
-                Autor autor2 = new Autor { FirstName = "Джон Поль", LastName = "Мюллер" };
-                Autor autor3 = new Autor { FirstName = "Лука", LastName = "Массарон" };
-                Autor autor4 = new Autor { FirstName = "Эндрю", LastName = "Троелсен" };
-                Autor autor5 = new Autor { FirstName = "Филипп", LastName = "Джепикс" };
-                Autor autor6 = new Autor { FirstName = "Роберт", LastName = "Мартин" };
+                Author autor1 = new Author { FirstName = "Адам", LastName = "Фримен" };
+                Author autor2 = new Author { FirstName = "Джон Поль", LastName = "Мюллер" };
+                Author autor3 = new Author { FirstName = "Лука", LastName = "Массарон" };
+                Author autor4 = new Author { FirstName = "Эндрю", LastName = "Троелсен" };
+                Author autor5 = new Author { FirstName = "Филипп", LastName = "Джепикс" };
+                Author autor6 = new Author { FirstName = "Роберт", LastName = "Мартин" };
 
-                bookDbContext.Autors.AddRange(autor1, autor2, autor3, autor4, autor5, autor6);
+                bookDbContext.Authors.AddRange(autor1, autor2, autor3, autor4, autor5, autor6);
 
                 Category category1 = new Category { Name = "C#" };
                 Category category2 = new Category { Name = "Программирование" };
@@ -46,7 +45,7 @@ namespace WebApiMyLib.Repositories
                         category2,
                         category4
                     }.ToList(),
-                    Autors = new Autor[]
+                    Authors = new Author[]
                     {
                         autor2
                     }.ToList()
@@ -61,7 +60,7 @@ namespace WebApiMyLib.Repositories
                         category4,
                         category3
                     }.ToList(),
-                    Autors = new Autor[]
+                    Authors = new Author[]
                     {
                         autor4,
                         autor5
@@ -75,7 +74,7 @@ namespace WebApiMyLib.Repositories
                         category2,
                         category4
                     }.ToList(),
-                    Autors = new Autor[]
+                    Authors = new Author[]
                     {
                         autor6
                     }.ToList()
@@ -90,7 +89,7 @@ namespace WebApiMyLib.Repositories
                         category3,
                         category4
                     }.ToList(),
-                    Autors = new Autor[]
+                    Authors = new Author[]
                     {
                         autor1
                     }.ToList()
@@ -102,8 +101,6 @@ namespace WebApiMyLib.Repositories
                 bookDbContext.Books.Add(book4);
 
                 bookDbContext.SaveChanges();
-
-
             }
         }
     }

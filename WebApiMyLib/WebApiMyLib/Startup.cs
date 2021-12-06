@@ -12,9 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApiMyLib.Models;
+using WebApiMyLib.Data.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using WebApiMyLib.Repositories;
+using WebApiMyLib.Data.Repositories;
 
 namespace WebApiMyLib
 {
@@ -27,8 +27,9 @@ namespace WebApiMyLib
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<BookDbContext>(options => 
-            options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MyLibrary;Trusted_Connection=True;MultipleActiveResultSets=true;"));
+            options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebApiMyLib")));
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IAutorRepository, AutorRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
@@ -37,7 +38,6 @@ namespace WebApiMyLib
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseStatusCodePages();

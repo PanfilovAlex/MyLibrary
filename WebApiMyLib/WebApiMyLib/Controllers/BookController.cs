@@ -55,18 +55,26 @@ namespace WebApiMyLib.Controllers
             };
             //требует рефакторнига - выглядит убого
             _bookRepository.AddBook(newBook);
-            return Ok("Book was added");
+            return Ok(newBook);
         }
 
         [HttpPut]
         public ActionResult<Book> Put([FromBody] Book book)
         {
-            var updatedBook = _bookRepository.UpdateBook(book);
+            var authorsFromBook = CheckOrCreateAutor(book);
+            var newBook = new Book
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Authors = authorsFromBook,
+                Categories = book.Categories
+            };
+            var updatedBook = _bookRepository.UpdateBook(newBook);
             if (updatedBook == null)
             {
                 return BadRequest();
             }
-            return Ok("Book was updated");
+            return Ok(updatedBook);
         }
 
         [HttpDelete("{id}")]
@@ -88,14 +96,10 @@ namespace WebApiMyLib.Controllers
             var checkedAutor = _autorRepository.GetAutors
                    .Where((a) => autorsFromBook.Select((afb) => afb.LastName).Contains(a.LastName)
                    && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName)).ToList();
+            existingAuthorIds.AddRange(checkedAutor);
             foreach (var autor in autorsFromBook)
             {
-                if (checkedAutor.Select(a => a.LastName).Contains(autor.LastName)
-                    && checkedAutor.Select(a => a.FirstName).Contains(autor.FirstName))
-                {
-                    existingAuthorIds.Add(checkedAutor.FirstOrDefault(a => a.LastName.Equals(autor.LastName)));
-                }
-                else
+                if(!checkedAutor.Any(a => a.LastName == autor.LastName && a.FirstName == autor.FirstName ))
                 {
                     existingAuthorIds.Add(_autorRepository.Add(autor));
                 }
@@ -107,9 +111,11 @@ namespace WebApiMyLib.Controllers
         {
             var bookDto = new BookDto
             {
+                Id = book.Id,
                 Title = book.Title,
                 Authors = book.Authors.Select(b => new AuthorDto
                 {
+                    Id = b.Id,
                     FirstName = b.FirstName,
                     LastName = b.LastName
                 }).ToList(),

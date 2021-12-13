@@ -6,7 +6,7 @@ using WebApiMyLib.Data.Models;
 
 namespace WebApiMyLib.Controllers
 {
-    [Route("api/autors")]
+    [Route("api/authors")]
     public class AuthorController : ControllerBase
     {
         private IAutorRepository _autorRepository;
@@ -14,7 +14,7 @@ namespace WebApiMyLib.Controllers
         public AuthorController(IAutorRepository repository) => _autorRepository = repository;
 
         [HttpGet]
-        public ActionResult<IEnumerable<Author>> Get(PageParameters pageParameters)
+        public ActionResult<IEnumerable<Author>> Get([FromQuery] BookPageParameters pageParameters)
            => _autorRepository.Autors(pageParameters).ToList();
 
         [HttpGet("{id}")]
@@ -32,6 +32,7 @@ namespace WebApiMyLib.Controllers
             return Ok($"{updatedAutor} was added");
         }
 
+        
         public IActionResult Delete(int id)
         {
             var exsistingAutor = _autorRepository.GetAutors.FirstOrDefault(a => a.Id == id);

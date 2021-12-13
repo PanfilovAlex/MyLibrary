@@ -11,7 +11,7 @@ namespace WebApiMyLib.Data.Repositories
         public AutorRepository(BookDbContext context) => _autorContext = context;
 
         public IEnumerable<Author> GetAutors => _autorContext.Authors;
-        public IEnumerable<Author> Autors(PageParameters pageParameters)
+        public IEnumerable<Author> Autors(BookPageParameters pageParameters)
         {
             return _autorContext.Authors.OrderBy(a => a.Id)
                  .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)

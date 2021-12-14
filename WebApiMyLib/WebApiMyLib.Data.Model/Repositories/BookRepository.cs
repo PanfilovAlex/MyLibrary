@@ -23,7 +23,7 @@ namespace WebApiMyLib.Data.Repositories
              .Where(book => !book.IsDeleted)
              .OrderBy(b => b.Id)
              .Include(c => c.Categories)
-             .Include(a => a.Authors);
+             .Include(a => a.Authors.Where(a => !a.IsDeleted));
 
             var searchedBooks = ApplySearchString(books, pageParameters.SearchString);
             var sortedBooks = SortBy(searchedBooks, pageParameters.SortBy);
@@ -56,7 +56,7 @@ namespace WebApiMyLib.Data.Repositories
         {
             var foundBook = bookContext.Books
                 .Where(b => !b.IsDeleted)
-                .Include(a => a.Authors)
+                .Include(a => a.Authors.Where(a => !a.IsDeleted))
                 .Include(c => c.Categories)
                 .FirstOrDefault(b => b.Id == id);
             return foundBook;

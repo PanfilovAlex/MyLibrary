@@ -14,8 +14,8 @@ namespace WebApiMyLib.Controllers
     public class BookController : ControllerBase
     {
         private IBookRepository _bookRepository;
-        private IAutorRepository _autorRepository;
-        public BookController(IBookRepository bookRepository, IAutorRepository autorRepository)
+        private IAuthorRepository _autorRepository;
+        public BookController(IBookRepository bookRepository, IAuthorRepository autorRepository)
         {
             _bookRepository = bookRepository;
             _autorRepository = autorRepository;
@@ -54,7 +54,7 @@ namespace WebApiMyLib.Controllers
                 Authors = autorsFromDb
             };
             //требует рефакторнига - выглядит убого
-            _bookRepository.AddBook(newBook);
+            newBook =_bookRepository.AddBook(newBook);
             return Ok(newBook);
         }
 
@@ -93,9 +93,10 @@ namespace WebApiMyLib.Controllers
         {
             var autorsFromBook = book.Authors;
             var existingAuthorIds = new List<Author>();
-            var checkedAutor = _autorRepository.GetAutors
+            var checkedAutor = _autorRepository.GetAuthors
                    .Where((a) => autorsFromBook.Select((afb) => afb.LastName).Contains(a.LastName)
-                   && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName)).ToList();
+                   && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName))
+                   .ToList();
             existingAuthorIds.AddRange(checkedAutor);
             foreach (var autor in autorsFromBook)
             {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using WebApiMyLib.BLL.Interfaces;
 using System.Web.Mvc;
 
 namespace WebApiMyLib.BLL.Servicies
@@ -15,11 +11,11 @@ namespace WebApiMyLib.BLL.Servicies
         {
             _modelState = modelState;
         }
-        public bool IsValid => throw new NotImplementedException();
+        public bool IsValid => _modelState.IsValid;
 
-        public void AddError(string key, string error)
+        public void AddError(string key, string errorMessage)
         {
-            throw new NotImplementedException();
+            _modelState.AddModelError(key, errorMessage);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApiMyLib.BLL.Interfaces
 {
-    internal interface IValidationDictionary
+    public interface IValidationDictionary
     {
         void AddError(string key, string error);
         bool IsValid { get; }

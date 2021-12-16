@@ -9,7 +9,7 @@ namespace WebApiMyLib.BLL.Interfaces
 {
     public interface ICategoryValidationService
     {
-        bool Validate(Category category);
-        bool IsExist(Category category);
+        bool Validate(IValidationDictionary validator, Category category);
+        
     }
 }

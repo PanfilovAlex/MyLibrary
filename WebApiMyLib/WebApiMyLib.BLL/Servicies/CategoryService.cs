@@ -13,9 +13,9 @@ namespace WebApiMyLib.BLL.Servicies
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private ModelStateDictionary _modelState;
+        private IValidationDictionary _modelState;
 
-        public CategoryService(ICategoryRepository categoryRepository, ModelStateDictionary modelState)
+        public CategoryService(ICategoryRepository categoryRepository, IValidationDictionary modelState)
         {
             _categoryRepository = categoryRepository;
             _modelState = modelState;
@@ -24,16 +24,11 @@ namespace WebApiMyLib.BLL.Servicies
 
         public Category Add(Category category)
         {
-            if (!ValidateCategory(category))
+            if(!CategoryValidationService.IsValid(_modelState, category))
             {
                 return null;
             }
-            Category newCategory = new Category();
 
-            if (IsExist(category))
-            {
-                return _categoryRepository.Categories.FirstOrDefault(a => a.Name.Equals(category.Name));
-            }
             try
             {
                 _categoryRepository.Add(category);
@@ -47,7 +42,12 @@ namespace WebApiMyLib.BLL.Servicies
         
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var categoryToDelete = _categoryRepository.Categories.FirstOrDefault(a => a.Id == id);
+            if(categoryToDelete == null)
+            {
+                return;
+            }
+            _categoryRepository.Delete(id);
         }
 
         public Category Find(int id)
@@ -62,20 +62,19 @@ namespace WebApiMyLib.BLL.Servicies
 
         public Category Update(Category category)
         {
-            if(!ValidateCategory(category))
+            if (!CategoryValidationService.IsValid(_modelState, category))
             {
                 return null;
             }
-            var updatedCategory = _categoryRepository.Find(category.Id);
-           
-            if (updatedCategory == null && !IsExist(category))
-            { 
+
+            var categoryToUpdate = _categoryRepository.Find(category.Id);
+            if(categoryToUpdate == null)
+            {
                 return null;
             }
+            categoryToUpdate = _categoryRepository.Update(category);
 
-            updatedCategory = _categoryRepository.Update(category);
-
-            return updatedCategory;
+            return categoryToUpdate;
         }
 
         protected bool ValidateCategory(Category categoryToValidate)

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using WebApiMyLib.Data.Models;
+using WebApiMyLib.Data.Repositories;
 
-namespace WebApiMyLib.Data.Repositories
+namespace WebApiMyLib.BLL.Interfaces
 {
-    public interface ICategoryRepository
+    internal interface ICategoryService
     {
         IEnumerable<Category> Categories { get; }
         Category Add(Category category);

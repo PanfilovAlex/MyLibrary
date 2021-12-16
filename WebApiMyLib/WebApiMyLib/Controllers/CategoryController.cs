@@ -18,9 +18,9 @@ namespace WebApiMyLib.Controllers
         public IEnumerable<Category> Get() => _bdCategories.Categories;
 
         [HttpGet("{id}")]
-        public Category Get(int id) => _bdCategories.FindCategory(id);
+        public Category Get(int id) => _bdCategories.Find(id);
 
         [HttpPost]
-        public Category Post([FromBody]Category category) => _bdCategories.AddCategory(category);
+        public Category Post([FromBody]Category category) => _bdCategories.Add(category);
     }
 }

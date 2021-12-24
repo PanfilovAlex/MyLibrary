@@ -348,3 +348,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/WebApiMyLib/WebApiMyLib.BLL/Servicies/Startup.cs

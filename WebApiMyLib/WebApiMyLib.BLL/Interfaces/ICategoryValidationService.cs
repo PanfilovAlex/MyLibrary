@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebApiMyLib.Data.Models;
+﻿using WebApiMyLib.Data.Models;
+using WebApiMyLib.BLL.Servicies;
 
 namespace WebApiMyLib.BLL.Interfaces
 {
     public interface ICategoryValidationService
     {
-        bool Validate(IValidationDictionary validator, Category category);
-        
+        ValidationResult Validate(Category category);   
     }
 }

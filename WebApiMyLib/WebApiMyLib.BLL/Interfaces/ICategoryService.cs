@@ -5,7 +5,7 @@ using WebApiMyLib.Data.Repositories;
 
 namespace WebApiMyLib.BLL.Interfaces
 {
-    internal interface ICategoryService
+    public interface ICategoryService
     {
         IEnumerable<Category> Categories { get; }
         Category Add(Category category);

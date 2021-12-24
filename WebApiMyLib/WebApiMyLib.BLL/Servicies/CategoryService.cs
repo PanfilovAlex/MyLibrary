@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
@@ -13,19 +12,21 @@ namespace WebApiMyLib.BLL.Servicies
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private IValidationDictionary _modelState;
-
-        public CategoryService(ICategoryRepository categoryRepository, IValidationDictionary modelState)
+        private ICategoryValidationService _categoryValidationService;
+        private CategoryExceptions exceptions;
+        public CategoryService(ICategoryRepository categoryRepository, ICategoryValidationService categoryValidationService)
         {
             _categoryRepository = categoryRepository;
-            _modelState = modelState;
+            _categoryValidationService = categoryValidationService;
         }
         public IEnumerable<Category> Categories => _categoryRepository.Categories.ToList();
 
         public Category Add(Category category)
         {
-            if(!CategoryValidationService.IsValid(_modelState, category))
+            
+            if (!_categoryValidationService.Validate(category).IsValid)
             {
+                exceptions = new CategoryExceptions(_categoryValidationService.Validate(category));
                 return null;
             }
 
@@ -39,11 +40,11 @@ namespace WebApiMyLib.BLL.Servicies
             }
             return _categoryRepository.Categories.FirstOrDefault(a => a.Name.Equals(category.Name));
         }
-        
+
         public void Delete(int id)
         {
             var categoryToDelete = _categoryRepository.Categories.FirstOrDefault(a => a.Id == id);
-            if(categoryToDelete == null)
+            if (categoryToDelete == null)
             {
                 return;
             }
@@ -54,45 +55,28 @@ namespace WebApiMyLib.BLL.Servicies
         {
             var foundCatgory = _categoryRepository.Find(id);
             if (foundCatgory == null)
-            { 
-                return null; 
+            {
+                return null;
             }
             return foundCatgory;
         }
 
         public Category Update(Category category)
         {
-            if (!CategoryValidationService.IsValid(_modelState, category))
+            
+            if (!_categoryValidationService.Validate(category).IsValid)
             {
-                return null;
+                exceptions = new CategoryExceptions(_categoryValidationService.Validate(category));
             }
 
             var categoryToUpdate = _categoryRepository.Find(category.Id);
-            if(categoryToUpdate == null)
+            if (categoryToUpdate == null)
             {
                 return null;
             }
             categoryToUpdate = _categoryRepository.Update(category);
 
             return categoryToUpdate;
-        }
-
-        protected bool ValidateCategory(Category categoryToValidate)
-        {
-            if (categoryToValidate.Name.Trim().Length == 0)
-            {
-                _modelState.AddModelError("Name", "Name is requered!");
-            }
-            return _modelState.IsValid;
-        }
-
-        protected bool IsExist(Category category)
-        {
-            if (_categoryRepository.Categories.Any(a => a.Name.Equals(category.Name)))
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

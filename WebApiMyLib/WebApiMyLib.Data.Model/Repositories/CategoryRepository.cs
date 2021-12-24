@@ -15,20 +15,13 @@ namespace WebApiMyLib.Data.Repositories
         public Category Add(Category category)
         {
             var newCategory = new Category
-            {
-                Id = category.Id,
+            {    
                 Name = category.Name,
-                Books = category.Books?.Select(b => new Book
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    IsDeleted = b.IsDeleted,
-      
-                }).ToList()
             };
             
+            _repository.Categories.Add(newCategory);
             _repository.SaveChanges();
-            return newCategory;
+            return _repository.Categories.FirstOrDefault(a => a.Name.Equals(newCategory.Name));
         }
 
         public void Delete(int id)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApiMyLib.BLL.Services
 {
-    internal class AuthorService
+    public class AuthorService
     {
     }
 }

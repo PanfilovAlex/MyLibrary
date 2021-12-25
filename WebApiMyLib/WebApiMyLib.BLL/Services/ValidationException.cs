@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApiMyLib.BLL.Services
 {
-    internal class ValidationException : Exception
+    public class ValidationException : Exception
     {
         private ValidationResult _validationResult;
 
@@ -15,7 +15,5 @@ namespace WebApiMyLib.BLL.Services
         {
             _validationResult = validationResult;
         }
-
-
     }
 }

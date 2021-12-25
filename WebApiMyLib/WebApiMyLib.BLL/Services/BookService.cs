@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApiMyLib.BLL.Services
 {
-    internal class BookService
+    public class BookService
     {
     }
 }

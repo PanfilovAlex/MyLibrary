@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
@@ -13,7 +10,7 @@ namespace WebApiMyLib.BLL.Services
     {
         private readonly ICategoryRepository _categoryRepository;
         private IValidationService<Category> _categoryValidationService;
-        private ValidationException exception;
+
         public CategoryService(ICategoryRepository categoryRepository, IValidationService<Category> categoryValidationService)
         {
             _categoryRepository = categoryRepository;
@@ -26,8 +23,8 @@ namespace WebApiMyLib.BLL.Services
             var validationResult = _categoryValidationService.Validate(category);
             if (!validationResult.IsValid)
             {
-                exception = new ValidationException(validationResult);
-                throw exception;
+                var validator = validationResult.Errors;
+                throw new ValidationException(validationResult);
             }
 
             try
@@ -66,8 +63,7 @@ namespace WebApiMyLib.BLL.Services
             var validationResult = _categoryValidationService.Validate(category);
             if (!validationResult.IsValid)
             {
-                exception = new ValidationException(validationResult);
-                throw exception;
+                throw new ValidationException(validationResult);
             }
 
             var categoryToUpdate = _categoryRepository.Find(category.Id);

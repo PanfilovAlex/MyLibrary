@@ -19,6 +19,10 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResult.AddError("Name", "Name should contain letters");
             }
+            if(category.Name.Trim().Length < 5)
+            {
+                _validationResult.AddError("Name", "Name too short");
+            }
             return _validationResult;
         }
     }

@@ -8,19 +8,19 @@ namespace WebApiMyLib.Controllers
     [Route("/api/[controller]")]
     public class CategoryController:ControllerBase
     {
-        private ICategoryService _bdCategories;
+        private ICategoryService _categoryService;
         public CategoryController(ICategoryService repository)
         {
-            _bdCategories = repository;
+            _categoryService = repository;
         }
 
         [HttpGet]
-        public IEnumerable<Category> Get() => _bdCategories.Categories;
+        public IEnumerable<Category> Get() => _categoryService.Categories;
 
         [HttpGet("{id}")]
-        public Category Get(int id) => _bdCategories.Find(id);
+        public Category Get(int id) => _categoryService.Find(id);
 
         [HttpPost]
-        public Category Post([FromBody]Category category) => _bdCategories.Add(category);
+        public Category Post([FromBody]Category category) => _categoryService.Add(category);
     }
 }

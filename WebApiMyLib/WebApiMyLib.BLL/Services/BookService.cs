@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApiMyLib.BLL.Servicies
+namespace WebApiMyLib.BLL.Services
 {
     internal class BookService
     {

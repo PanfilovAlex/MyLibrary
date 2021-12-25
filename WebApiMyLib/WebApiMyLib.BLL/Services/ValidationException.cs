@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApiMyLib.BLL.Servicies
+namespace WebApiMyLib.BLL.Services
 {
-    internal class CategoryExceptions:Exception
+    internal class ValidationException : Exception
     {
         private ValidationResult _validationResult;
 
-        public CategoryExceptions() { }
-        public CategoryExceptions(ValidationResult validationResult)
+        public ValidationException() { }
+        public ValidationException(ValidationResult validationResult)
         {
             _validationResult = validationResult;
         }

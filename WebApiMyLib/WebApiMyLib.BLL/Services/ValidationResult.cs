@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApiMyLib.BLL.Servicies
+namespace WebApiMyLib.BLL.Services
 {
     public class ValidationResult
     {
@@ -37,7 +37,5 @@ namespace WebApiMyLib.BLL.Servicies
                 return _errorsDictionary.Count == 0; 
             }
         }
-
-
     }
 }

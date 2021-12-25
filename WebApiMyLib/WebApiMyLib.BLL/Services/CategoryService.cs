@@ -7,14 +7,14 @@ using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
 
-namespace WebApiMyLib.BLL.Servicies
+namespace WebApiMyLib.BLL.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private ICategoryValidationService _categoryValidationService;
-        private CategoryExceptions exceptions;
-        public CategoryService(ICategoryRepository categoryRepository, ICategoryValidationService categoryValidationService)
+        private IValidationService<Category> _categoryValidationService;
+        private ValidationException exceptions;
+        public CategoryService(ICategoryRepository categoryRepository, IValidationService<Category> categoryValidationService)
         {
             _categoryRepository = categoryRepository;
             _categoryValidationService = categoryValidationService;
@@ -26,7 +26,7 @@ namespace WebApiMyLib.BLL.Servicies
             
             if (!_categoryValidationService.Validate(category).IsValid)
             {
-                exceptions = new CategoryExceptions(_categoryValidationService.Validate(category));
+                exceptions = new ValidationException(_categoryValidationService.Validate(category));
                 return null;
             }
 
@@ -66,7 +66,7 @@ namespace WebApiMyLib.BLL.Servicies
             
             if (!_categoryValidationService.Validate(category).IsValid)
             {
-                exceptions = new CategoryExceptions(_categoryValidationService.Validate(category));
+                exceptions = new ValidationException(_categoryValidationService.Validate(category));
             }
 
             var categoryToUpdate = _categoryRepository.Find(category.Id);

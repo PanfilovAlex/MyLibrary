@@ -16,7 +16,7 @@ using WebApiMyLib.Data.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.BLL.Interfaces;
-using WebApiMyLib.BLL.Servicies;
+using WebApiMyLib.BLL.Services;
 
 namespace WebApiMyLib
 {
@@ -36,7 +36,7 @@ namespace WebApiMyLib
             services.AddTransient<IAuthorRepository, AuthorRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<ICategoryValidationService, CategoryValidationService>();
+            services.AddTransient<IValidationService<Category>, CategoryValidationService>();
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMvc();

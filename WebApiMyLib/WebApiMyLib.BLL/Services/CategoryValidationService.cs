@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.BLL.Servicies
+namespace WebApiMyLib.BLL.Services
 {
-    public class CategoryValidationService:ICategoryValidationService
+    public class CategoryValidationService : IValidationService<Category>
     {
         private ValidationResult _validationResult = new ValidationResult();
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using WebApiMyLib.Data.Repositories;
+using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 
 namespace WebApiMyLib.Controllers
@@ -8,8 +8,8 @@ namespace WebApiMyLib.Controllers
     [Route("/api/[controller]")]
     public class CategoryController:ControllerBase
     {
-        private ICategoryRepository _bdCategories;
-        public CategoryController(ICategoryRepository repository)
+        private ICategoryService _bdCategories;
+        public CategoryController(ICategoryService repository)
         {
             _bdCategories = repository;
         }
@@ -18,9 +18,9 @@ namespace WebApiMyLib.Controllers
         public IEnumerable<Category> Get() => _bdCategories.Categories;
 
         [HttpGet("{id}")]
-        public Category Get(int id) => _bdCategories.FindCategory(id);
+        public Category Get(int id) => _bdCategories.Find(id);
 
         [HttpPost]
-        public Category Post([FromBody]Category category) => _bdCategories.AddCategory(category);
+        public Category Post([FromBody]Category category) => _bdCategories.Add(category);
     }
 }

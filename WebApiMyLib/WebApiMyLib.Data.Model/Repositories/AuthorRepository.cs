@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WebApiMyLib.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApiMyLib.Data.Repositories
 {
-    public class AutorRepository : IAutorRepository
+    public class AuthorRepository : IAuthorRepository
     {
         private BookDbContext _autorContext;
 
-        public AutorRepository(BookDbContext context) => _autorContext = context;
+        public AuthorRepository(BookDbContext context) => _autorContext = context;
 
-        public IEnumerable<Author> GetAutors => _autorContext.Authors;
-        public PagedList<Author> Autors(PageParameters pageParameters)
+        public IEnumerable<Author> GetAuthors => _autorContext.Authors;
+        public IEnumerable<Author> Authors(BookPageParameters pageParameters)
         {
-            var authors = _autorContext.Authors.OrderBy(a => a.Id)
-                 .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                 .Take(pageParameters.PageSize);
+            var authors = _autorContext.Authors.Where(author => !author.IsDeleted)
+                .Include(books => books.Books.Where(book => !book.IsDeleted));
 
             return PagedList<Author>.ToPagedList(authors, pageParameters.PageNumber, pageParameters.PageSize);
         }
@@ -42,19 +42,24 @@ namespace WebApiMyLib.Data.Repositories
 
         public Author Update(Author autor)
         {
-            var updatedAutor = _autorContext.Authors.FirstOrDefault(a => a.Id == autor.Id);
-            if (updatedAutor != null)
+            var originalAutor = _autorContext.Authors.Include(b => b.Books).FirstOrDefault(a => a.Id == autor.Id);
+            
+            if (originalAutor != null)
             {
-                updatedAutor.FirstName = autor.FirstName;
-                updatedAutor.LastName = autor.LastName;
-                updatedAutor.IsDeleted = autor.IsDeleted;
-                updatedAutor.Books = autor.Books.Select(a => new Book
+                originalAutor.FirstName = autor.FirstName;
+                originalAutor.LastName = autor.LastName;
+                originalAutor.IsDeleted = autor.IsDeleted;
+                originalAutor.Books = autor.Books.Select(a => new Book
                 {
-                    Title = a.Title
+                    Id = a.Id,
+                    Title = a.Title,
+                    IsDeleted = a.IsDeleted,
+                    Categories = a.Categories,
+                    Authors = a.Authors
                 }).ToList();
                 _autorContext.SaveChanges();
             }
-            return updatedAutor;
+            return originalAutor;
         }
     }
 }

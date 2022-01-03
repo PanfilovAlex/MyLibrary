@@ -3,10 +3,10 @@ using WebApiMyLib.Data.Models;
 
 namespace WebApiMyLib.Data.Repositories
 {
-    public interface IAutorRepository
+    public interface IAuthorRepository
     {
-        IEnumerable<Author> GetAutors { get; }
-        PagedList<Author> Autors(PageParameters pageParameters);
+        IEnumerable<Author> GetAuthors { get; }
+        IEnumerable<Author> Authors(BookPageParameters pageParameters);
         public Author Find(int id);
         public Author Add(Author autor);
         public Author Update(Author autor);

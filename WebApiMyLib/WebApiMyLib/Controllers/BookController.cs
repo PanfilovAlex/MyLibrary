@@ -14,8 +14,8 @@ namespace WebApiMyLib.Controllers
     public class BookController : ControllerBase
     {
         private IBookRepository _bookRepository;
-        private IAutorRepository _autorRepository;
-        public BookController(IBookRepository bookRepository, IAutorRepository autorRepository)
+        private IAuthorRepository _autorRepository;
+        public BookController(IBookRepository bookRepository, IAuthorRepository autorRepository)
         {
             _bookRepository = bookRepository;
             _autorRepository = autorRepository;
@@ -61,7 +61,15 @@ namespace WebApiMyLib.Controllers
         [HttpPut]
         public ActionResult<Book> Put([FromBody] Book book)
         {
-            var updatedBook = _bookRepository.UpdateBook(book);
+            var authorsFromBook = CheckOrCreateAutor(book);
+            var newBook = new Book
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Authors = authorsFromBook,
+                Categories = book.Categories
+            };
+            var updatedBook = _bookRepository.UpdateBook(newBook);
             if (updatedBook == null)
             {
                 return BadRequest();
@@ -85,17 +93,14 @@ namespace WebApiMyLib.Controllers
         {
             var autorsFromBook = book.Authors;
             var existingAuthorIds = new List<Author>();
-            var checkedAutor = _autorRepository.GetAutors
+            var checkedAutor = _autorRepository.GetAuthors
                    .Where((a) => autorsFromBook.Select((afb) => afb.LastName).Contains(a.LastName)
-                   && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName)).ToList();
+                   && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName))
+                   .ToList();
+            existingAuthorIds.AddRange(checkedAutor);
             foreach (var autor in autorsFromBook)
             {
-                if (checkedAutor.Select(a => a.LastName).Contains(autor.LastName)
-                    && checkedAutor.Select(a => a.FirstName).Contains(autor.FirstName))
-                {
-                    existingAuthorIds.Add(checkedAutor.FirstOrDefault(a => a.LastName.Equals(autor.LastName)));
-                }
-                else
+                if(!checkedAutor.Any(a => a.LastName == autor.LastName && a.FirstName == autor.FirstName ))
                 {
                     existingAuthorIds.Add(_autorRepository.Add(autor));
                 }

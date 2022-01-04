@@ -22,10 +22,10 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<BookDto>> Get([FromQuery] BookPageParameters pageParameters)
+        public ActionResult<PagedListDto<BookDto>> Get([FromQuery] BookPageParameters pageParameters)
         {
-            var books = _bookRepository.Books(pageParameters).ToList();
-            return books.Select(book => ConvertToBookDto(book)).ToList();
+            var books = _bookRepository.Books(pageParameters);
+            return new PagedListDto<BookDto>(books.Select((b) => ConvertToBookDto(b)).ToList(), books.TotalCount);
         }
 
         [HttpGet("{id}")]
@@ -54,8 +54,8 @@ namespace WebApiMyLib.Controllers
                 Authors = autorsFromDb
             };
             //требует рефакторнига - выглядит убого
-            newBook =_bookRepository.AddBook(newBook);
-            return Ok(newBook);
+            var createdBook = _bookRepository.AddBook(newBook);
+            return Ok(createdBook);
         }
 
         [HttpPut]

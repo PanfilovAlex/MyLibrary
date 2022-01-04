@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Data.Models;
 
@@ -17,7 +16,7 @@ namespace WebApiMyLib.Data.Repositories
         }
 
         public IEnumerable<Book> GetBooks => bookContext.Books;
-        public IEnumerable<Book> Books(BookPageParameters pageParameters)
+        public PagedList<Book> Books(BookPageParameters pageParameters)
         {
             var books = bookContext.Books
              .Where(book => !book.IsDeleted)

@@ -7,7 +7,7 @@ using WebApiMyLib.Models;
 
 namespace WebApiMyLib.Controllers
 {
-    [Route("api/authors")]
+    [Route("api/[controller]")]
     public class AuthorController : ControllerBase
     {
         private IAuthorRepository _authorRepository;

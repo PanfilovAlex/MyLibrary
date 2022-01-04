@@ -5,10 +5,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { Category } from '../../../models/category';
 import { Author } from '../../../models/author';
 import { BookAuthorListEditor } from '../book-author-list-editor/book-author-list-editor';
+// import styles from './book-editor.css';
+import clsx from 'clsx';
 
 export type BookEditorProps = {
   book?: Book,
@@ -23,10 +25,13 @@ export function BookEditor(props: BookEditorProps): JSX.Element {
     onSubmit,
   } = props;
 
-  const dialogTitle = book ? 'Edit' : 'Create';
   const [title, setTitle] = useState<string>(book?.title ?? '');
   const [authors, setAuthors] = useState<Author[]>(book?.authors ?? []);
   const [categories, setCategories] = useState<Category[]>(book?.categories ?? []);
+
+  const dialogTitle = useMemo(() => {
+    return book ? 'Edit' : 'Create';
+  }, [book]);
 
   const handleSubmitButtonClick = () => {
     // TODO: wrap fetch calls in api client
@@ -46,6 +51,7 @@ export function BookEditor(props: BookEditorProps): JSX.Element {
       .then((data) => {
         onSubmit && onSubmit(data as Book);
       });
+      // TODO: add error handling
   };
 
   const onTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -72,8 +78,9 @@ export function BookEditor(props: BookEditorProps): JSX.Element {
           onChange={onTitleChange}
         />
         <BookAuthorListEditor
-            authors={authors}
-            onChange={onAuthorsChange} />
+          className="book-author-list-editor"
+          authors={authors}
+          onChange={onAuthorsChange} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

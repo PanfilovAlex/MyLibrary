@@ -7,6 +7,7 @@ import {
 import './App.css';
 import { AuthorList } from './components/author-list/author-list';
 import { BookList } from './components/book-list/book-list';
+import { CategoryList } from './components/category-list/category-list';
 import NavTabs from './components/navigation-tabs/navigation-tabs';
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
 
                         <Route path="/authors" element={<AuthorList />} />
 
-                        {/* <Route path="/categories" element={<CategoryList />} /> */}
+                        <Route path="/categories" element={<CategoryList />} />
                     </Routes>
                 </div>
             </Router>

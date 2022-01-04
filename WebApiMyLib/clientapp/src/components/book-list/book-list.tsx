@@ -16,9 +16,9 @@ import { BookEditor } from './book-editor/book-editor';
 export function BookList(): JSX.Element {
     const pageSize = 10;
     const [books, setBooks] = useState<Book[]>([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [isEditorOpened, setIsEditorOpened] = useState(false);
+    const [totalCount, setTotalCount] = useState<number>(0);
     const [bookForEditing, setBookForEditing] = useState<Book>();
+    const [isEditorOpened, setIsEditorOpened] = useState<boolean>(false);
 
     const location = useLocation();
     const query = new URLSearchParams(location.search);
@@ -40,17 +40,17 @@ export function BookList(): JSX.Element {
             });
     }, [pageNumber, pageSize]);
 
-    const handleItemClick = (bookId: number) => {
-        setBookForEditing(books.find((b) => b.id === bookId));
+    const handleItemClick = (book: Book) => {
+        setBookForEditing(book);
         setIsEditorOpened(true);
     };
 
     const handleCreateButtonClick = () => {
-        setBookForEditing(undefined);
         setIsEditorOpened(true);
     };
 
     const handleEditorClose = () => {
+        setBookForEditing(undefined);
         setIsEditorOpened(false);
     };
 
@@ -96,7 +96,7 @@ export function BookList(): JSX.Element {
                                     primary={book.title}
                                     secondary={book.authors.map((a) => `${a.firstName} ${a.lastName}`).join(', ')}
                                     // secondary={<BookAuthorListEditor authors={book.authors} readonly />}
-                                    onClick={() => handleItemClick(book.id!)}
+                                    onClick={() => handleItemClick(book)}
                                 />
 
                                 <IconButton

@@ -1,14 +1,13 @@
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { Author } from '../../../models/author';
 import { getFullName } from '../../../selectors/author-selectors';
 
 export type BookAuthorsEditorProps = {
-    authors: Author[],
-    onChange?: (authors: Author[]) => void,
+    authors: Author[];
+    onChange?: (authors: Author[]) => void;
+    className?: string;
 };
 
 const filter = createFilterOptions<Author>();
@@ -17,6 +16,7 @@ export function BookAuthorListEditor(props: BookAuthorsEditorProps): JSX.Element
     const {
         authors,
         onChange,
+        className,
     } = props;
 
     const [avaialableAuthors, setAvailableAuthors] = useState<Author[]>();
@@ -31,7 +31,7 @@ export function BookAuthorListEditor(props: BookAuthorsEditorProps): JSX.Element
                 }
             })
             .then((data) => {
-                setAvailableAuthors(data.items as Author[]);
+                setAvailableAuthors(data as Author[]);
             })
     }, []);
 
@@ -114,6 +114,7 @@ export function BookAuthorListEditor(props: BookAuthorsEditorProps): JSX.Element
                 renderInput={(params) => (
                     <TextField {...params} label="Authors" />
                 )}
+                className={className}
             />
         </>
     );

@@ -1,20 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Category } from '../../models/category';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Button, IconButton, Pagination, PaginationItem } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
-import { Author } from '../../models/author';
-import { getFullName } from '../../selectors/author-selectors';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { AuthorEditor } from './author-editor/author-editor';
+import { CategoryEditor } from './category-editor/category-editor';
 
-// TODO: think on how to generalize list components (book, author, category)
-export function AuthorList() {
+export function CategoryList() {
     const pageSize = 10;
-    const [totalCount, setTotalCount] = useState<number>(0);
-    const [authors, setAuthors] = useState<Author[]>([]);
-    const [authorForEditing, setAuthorForEditing] = useState<Author>();
+    const [totalCount, setTotalCount] = useState(0);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [categoryForEditing, setCategoryForEditing] = useState<Category>();
     const [isEditorOpened, setIsEditorOpened] = useState<boolean>(false);
 
     const location = useLocation();
@@ -23,22 +21,22 @@ export function AuthorList() {
     const numberOfPages = Math.ceil(totalCount / pageSize);
 
     useEffect(() => {
-        const url = `api/author?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        const url = `api/category?pageNumber=${pageNumber}&pageSize=${pageSize}`;
         fetch(url)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
                 }
-                console.error(`error occurred while fetching authors, url: ${url}`);
+                console.error(`error occurred while fetching categories, url: ${url}`);
             })
             .then((data) => {
-                setAuthors(data as Author[]);
+                setCategories(data as Category[]);
                 setTotalCount(data.totalCount);
             });
     }, [pageNumber]);
 
     const handleDeleteButtonClick = useCallback((id: number) => {
-        const url = `api/author/${id}`;
+        const url = `api/category/${id}`;
         fetch(url, {
             method: 'DELETE',
         })
@@ -46,17 +44,17 @@ export function AuthorList() {
             //   .then((response) => response.json())
             .then((data) => {
                 if (data.ok) {
-                    setAuthors((current) => {
-                        return current.filter((author) => author.id !== id);
+                    setCategories((current) => {
+                        return current.filter((category) => category.id !== id);
                     });
                 } else {
                     console.error(`error occurred while deleting author, url: ${url}`);
                 }
             });
-    }, [setAuthors]);
+    }, [setCategories]);
 
-    const handleItemClick = (author: Author) => {
-        setAuthorForEditing(author);
+    const handleItemClick = (category: Category) => {
+        setCategoryForEditing(category);
         setIsEditorOpened(true);
     };
 
@@ -65,16 +63,16 @@ export function AuthorList() {
     };
 
     const handleEditorClose = () => {
-        setAuthorForEditing(undefined);
+        setCategoryForEditing(undefined);
         setIsEditorOpened(false);
     };
 
-    const handleEditorSubmit = (author: Author) => {
-        setAuthors((current) => {
-            if (current.find((a) => a.id === author.id)) {
-                return [...current.filter((a) => a.id !== author.id), author];
+    const handleEditorSubmit = (category: Category) => {
+        setCategories((current) => {
+            if (current.find((c) => c.id === category.id)) {
+                return [...current.filter((c) => c.id !== category.id), category];
             }
-            return [...current, author];
+            return [...current, category];
         });
         setIsEditorOpened(false);
     };
@@ -83,19 +81,19 @@ export function AuthorList() {
         <>
             <List>
                 {
-                    authors.map((author) => {
+                    categories.map((category) => {
                         return (
                             <ListItem
-                                key={author.id}>
+                                key={category.id}>
 
                                 <ListItemText
-                                    primary={getFullName(author)}
-                                    onClick={() => handleItemClick(author)}
+                                    primary={category.name}
+                                    onClick={() => handleItemClick(category)}
                                 />
 
                                 <IconButton
                                     color="primary"
-                                    onClick={() => handleDeleteButtonClick(author.id!)}>
+                                    onClick={() => handleDeleteButtonClick(category.id!)}>
                                     <DeleteIcon />
                                 </IconButton>
                             </ListItem>
@@ -106,7 +104,7 @@ export function AuthorList() {
                     <Button
                         variant="text"
                         onClick={handleCreateButtonClick}>
-                        Add Author
+                        Add Category
                     </Button>
                 </ListItem>
             </List>
@@ -118,15 +116,15 @@ export function AuthorList() {
                     renderItem={(item) => (
                         <PaginationItem
                             component={Link}
-                            to={`/authors${item.page === 1 ? '' : `?page=${item.page}`}`}
+                            to={`/categories${item.page === 1 ? '' : `?page=${item.page}`}`}
                             {...item} />
                     )}
                 />
             )}
 
             {isEditorOpened && (
-                <AuthorEditor
-                    author={authorForEditing}
+                <CategoryEditor
+                    category={categoryForEditing}
                     onClose={handleEditorClose}
                     onSubmit={handleEditorSubmit} />
             )}

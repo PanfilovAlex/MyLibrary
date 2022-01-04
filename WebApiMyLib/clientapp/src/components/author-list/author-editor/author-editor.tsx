@@ -54,13 +54,15 @@ export function AuthorEditor(props: AuthorEditorProps): JSX.Element {
         setLastName(event.target.value);
     };
 
-
     return (
         <Dialog
             open={true}
             onClose={onClose}>
+
             <DialogTitle>{dialogTitle}</DialogTitle>
+
             <DialogContent>
+
                 <TextField
                     label="First Name"
                     fullWidth
@@ -68,6 +70,7 @@ export function AuthorEditor(props: AuthorEditorProps): JSX.Element {
                     value={firstName}
                     onChange={onFirstNameChange}
                 />
+
                 <TextField
                     label="Last Name"
                     fullWidth
@@ -76,6 +79,7 @@ export function AuthorEditor(props: AuthorEditorProps): JSX.Element {
                     onChange={onLastNameChange}
                 />
             </DialogContent>
+
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
                 <Button onClick={handleSubmitButtonClick}>Submit</Button>

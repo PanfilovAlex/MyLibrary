@@ -48,14 +48,6 @@ namespace WebApiMyLib
             app.UseStaticFiles();
             app.UseRouting();
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        null,
-            //        "{controller=Home}/{action=Index}");
-            //});
-            ///SeedData.EnsurePopulated(app);
-
             // app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
 

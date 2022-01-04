@@ -38,20 +38,6 @@ export function BookAuthorListEditor(props: BookAuthorsEditorProps): JSX.Element
     // TODO: something goes wrong when adding custom author
     return (
         <>
-            {/* <Stack
-                id={id}
-                direction="row"
-                spacing={1}>
-
-                {authors.map((author) =>
-                    <Chip
-                        key={author.id}
-                        label={`${author.firstName} ${author.lastName}`}
-                        variant="outlined"
-                        onDelete={handleDelete} />
-                )}
-            </Stack> */}
-
             <Autocomplete
                 multiple
                 options={avaialableAuthors ?? []}
@@ -66,18 +52,6 @@ export function BookAuthorListEditor(props: BookAuthorsEditorProps): JSX.Element
                 }}
                 onChange={(event, newValue) => {
                     onChange && onChange(newValue);
-                    // if (typeof newValue === 'string') {
-                    //     setValue({
-                    //         title: newValue,
-                    //     });
-                    // } else if (newValue && newValue.inputValue) {
-                    //     // Create a new value from the user input
-                    //     setValue({
-                    //         title: newValue.inputValue,
-                    //     });
-                    // } else {
-                    //     setValue(newValue);
-                    // }
                 }}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 filterOptions={(options, params) => {
@@ -97,7 +71,6 @@ export function BookAuthorListEditor(props: BookAuthorsEditorProps): JSX.Element
 
                     return filtered;
                 }}
-                // getOptionLabel={(option) => getFullName(option)}
                 getOptionLabel={(option) => {
                     // Value selected with enter, right from the input
                     if (typeof option === 'string') {

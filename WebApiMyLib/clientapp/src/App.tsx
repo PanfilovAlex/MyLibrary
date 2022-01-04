@@ -13,6 +13,7 @@ import NavTabs from './components/navigation-tabs/navigation-tabs';
 function App() {
     return (
         <div className="App">
+
             <Typography variant="h3" component="div" gutterBottom align="left">
                 My Library
             </Typography>
@@ -31,10 +32,6 @@ function App() {
                     </Routes>
                 </div>
             </Router>
-
-
-
-
         </div>
     );
 }

@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WebApiMyLib.BLL.Services
 {
     public class ValidationException : Exception
     {
-        private ValidationResult _validationResult;
-
-        public ValidationException() { }
+        private Dictionary<string, List<string>> exceptions; 
         public ValidationException(ValidationResult validationResult)
         {
-            _validationResult = validationResult;
+            exceptions = validationResult.Errors;
+        }
+        public override IDictionary Data
+        {
+            get
+            {
+                return exceptions;
+            }
         }
     }
 }

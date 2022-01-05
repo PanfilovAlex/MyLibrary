@@ -32,15 +32,12 @@ namespace WebApiMyLib.BLL.Services
                 return _errorsDictionary.Count == 0;
             }
         }  
-        public List<string> Errors
+
+        public Dictionary<string, List<string>> Errors
         {
             get
             {
-                var errorsList = new List<string>();
-                foreach (var errors in _errorsDictionary.Values)
-                    foreach (var error in errors)
-                        errorsList.Add(error);
-                return errorsList;
+                return _errorsDictionary;
             }
         }
     }

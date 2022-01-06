@@ -35,9 +35,11 @@ namespace WebApiMyLib
             options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebApiMyLib")));
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
+            services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IValidationService<Category>, CategoryValidationService>();
+            services.AddTransient<IValidationService<Author>, AuthorValidationService >();
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMvc(options => options.Filters.Add(new ExceptionFilter()));

@@ -10,11 +10,15 @@ namespace WebApiMyLib.BLL.Services
         private ValidationResult _validationResul = new ValidationResult();
         public ValidationResult Validate(Author author)
         {
+            if (author == null)
+            {
+                _validationResul.AddError("Author", "Author is empty");
+            }
             if (author.FirstName.Trim().Length == 0)
             {
                 _validationResul.AddError("First Name", "Name can't be empty");
             }
-            if(author.FirstName.Trim().Length < 2 || author.FirstName.Trim().Length > 50)
+            if (author.FirstName.Trim().Length < 2 || author.FirstName.Trim().Length > 50)
             {
                 _validationResul.AddError("First Name", "Name should be more than 2 symbols and lesser than 50 symbols");
             }

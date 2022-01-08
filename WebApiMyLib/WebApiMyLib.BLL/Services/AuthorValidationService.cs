@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using WebApiMyLib.BLL.Interfaces;
+﻿using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using System.Linq;
 
@@ -22,7 +21,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResul.AddError("First Name", "Name should be more than 2 symbols and lesser than 50 symbols");
             }
-            if (!author.FirstName.Trim().All(char.IsLetter))
+            if (author.FirstName.Trim().Any(char.IsNumber) || author.FirstName.Trim().Any(char.IsSymbol))
             {
                 _validationResul.AddError("Name", "Name shyould contain letters");
             }
@@ -30,7 +29,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResul.AddError("Last Name", "Last Name cant' be empty");
             }
-            if(!author.LastName.Trim().All(char.IsLetter))
+            if(author.LastName.Trim().Any(char.IsNumber))
             {
                 _validationResul.AddError("Last Name", "Last Name should contain letters");
             }

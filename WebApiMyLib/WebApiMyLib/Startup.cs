@@ -38,8 +38,10 @@ namespace WebApiMyLib
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IBookService, BookService>();
             services.AddTransient<IValidationService<Category>, CategoryValidationService>();
             services.AddTransient<IValidationService<Author>, AuthorValidationService >();
+            services.AddTransient<IValidationService<Book>, BookValidationService>();
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMvc(options => options.Filters.Add(new ExceptionFilter()));

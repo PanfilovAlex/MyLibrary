@@ -41,7 +41,8 @@ namespace WebApiMyLib.Controllers
             {
                 return BadRequest();
             }
-            return Ok($"{adeddAuthor} was added");
+            var author = ConvertToAuthorDto(adeddAuthor);
+            return Ok($"ID:{author.Id}, {author.FirstName} {author.LastName} was added");
         }
 
         [HttpPut]

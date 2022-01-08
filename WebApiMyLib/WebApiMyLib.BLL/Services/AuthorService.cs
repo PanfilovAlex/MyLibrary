@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
@@ -20,6 +18,8 @@ namespace WebApiMyLib.BLL.Services
             _authorRepository = authorRepository;
             _validationService = validationService;
         }
+
+        public IEnumerable<Author> GetAuthors => _authorRepository.GetAuthors;
         public IEnumerable<Author> Authors(BookPageParameters pageParameters)
             => _authorRepository.Authors(pageParameters);
 

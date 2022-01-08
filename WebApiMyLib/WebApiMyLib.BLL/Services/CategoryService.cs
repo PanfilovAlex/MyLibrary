@@ -71,7 +71,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 return null;
             }
-            categoryToUpdate = _categoryRepository.Update(category);
+            categoryToUpdate = _categoryRepository.Update(categoryToUpdate);
 
             return categoryToUpdate;
         }

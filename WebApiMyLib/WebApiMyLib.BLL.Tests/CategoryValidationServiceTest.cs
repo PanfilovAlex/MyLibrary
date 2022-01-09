@@ -9,17 +9,55 @@ namespace WebApiMyLib.BLL.Tests
     public class CategoryValidationServiceTest
     {
         [Fact]
-        public void CanValidateCategory()
+        public void Validate_ReturnsEmptyErrorList_IfCategoryIsValid()
         {
-            var categoryValidationResult = new CategoryValidationService();
+            //Arrange
+            var categoryValidationService = new CategoryValidationService();
             var category = new Category()
             {
                 Name = "Проверка юнит-тестов",
             };
-            
-            var categoryForValidation = categoryValidationResult.Validate(category);
 
-            Assert.Empty(categoryForValidation.Errors);
+            //Act
+            bool isValid = categoryValidationService.Validate(category).IsValid;
+
+            //Assert
+            Assert.True(isValid);
         }
+
+        [Fact]
+        public void Validate_ReturnsError_IfCategoryIsEmptyString()
+        {
+            //Arrange
+            var categoryValidationService = new CategoryValidationService();
+            var category = new Category()
+            {
+                Name = ""
+            };
+
+            //Act
+            bool isValid = categoryValidationService.Validate(category).IsValid;
+
+            //Assert
+            Assert.False(isValid);
+        }
+
+        [Fact]
+        public void Vaidate_ReturnsError_IfCategoryContainsSymbols()
+        {
+            //Arrange
+            var categoryValidationService = new CategoryValidationService();
+            var category = new Category()
+            {
+                Name = "Проверка теста на валидно$ть с символами"
+            };
+
+            //Act
+            bool isValid = categoryValidationService.Validate(category).IsValid;
+
+            //Assert
+            Assert.False(isValid);
+        }
+
     }
 }

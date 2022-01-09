@@ -1,15 +1,14 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 using WebApiMyLib.BLL.Services;
 using WebApiMyLib.Data.Models;
-using Microsoft.AspNetCore.Http;
+
 
 namespace WebApiMyLib.BLL.Tests
 {
     public class CategoryValidationServiceTest
     {
         [Fact]
-        public void Validate_ReturnsEmptyErrorList_IfCategoryIsValid()
+        public void Validate_ReturnsTrue_IfCategoryIsValid()
         {
             //Arrange
             var categoryValidationService = new CategoryValidationService();
@@ -26,7 +25,7 @@ namespace WebApiMyLib.BLL.Tests
         }
 
         [Fact]
-        public void Validate_ReturnsError_IfCategoryIsEmptyString()
+        public void Validate_ReturnsFalse_IfCategoryIsEmptyString()
         {
             //Arrange
             var categoryValidationService = new CategoryValidationService();
@@ -43,7 +42,7 @@ namespace WebApiMyLib.BLL.Tests
         }
 
         [Fact]
-        public void Vaidate_ReturnsError_IfCategoryContainsSymbols()
+        public void Vaidate_ReturnsFalse_IfCategoryContainsSymbols()
         {
             //Arrange
             var categoryValidationService = new CategoryValidationService();

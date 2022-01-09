@@ -15,7 +15,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResult.AddError("Name", "Name is requared");
             }
-            if(!category.Name.Trim().All(char.IsLetter))
+            if(category.Name.Trim().Any(char.IsNumber) || category.Name.Trim().Any(char.IsSymbol))
             {
                 _validationResult.AddError("Name", "Name should contain letters");
             }

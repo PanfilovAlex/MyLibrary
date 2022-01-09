@@ -29,7 +29,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResul.AddError("Last Name", "Last Name cant' be empty");
             }
-            if(author.LastName.Trim().Any(char.IsNumber))
+            if(author.LastName.Trim().Any(char.IsNumber) || author.LastName.Trim().Any(char.IsSymbol))
             {
                 _validationResul.AddError("Last Name", "Last Name should contain letters");
             }

@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
 
-namespace WebApiMyLib.BLL.Services
+namespace WebApiMyLib.BLL.Servicies
 {
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private IValidationService<Category> _categoryValidationService;
-
-        public CategoryService(ICategoryRepository categoryRepository, IValidationService<Category> categoryValidationService)
+        private ICategoryValidationService _categoryValidationService;
+        private CategoryExceptions exceptions;
+        public CategoryService(ICategoryRepository categoryRepository, ICategoryValidationService categoryValidationService)
         {
             _categoryRepository = categoryRepository;
             _categoryValidationService = categoryValidationService;
@@ -20,11 +23,11 @@ namespace WebApiMyLib.BLL.Services
 
         public Category Add(Category category)
         {
-            var validationResult = _categoryValidationService.Validate(category);
-            if (!validationResult.IsValid)
+            
+            if (!_categoryValidationService.Validate(category).IsValid)
             {
-                var validator = validationResult.Errors;
-                throw new ValidationException(validationResult);
+                exceptions = new CategoryExceptions(_categoryValidationService.Validate(category));
+                return null;
             }
 
             try
@@ -60,10 +63,10 @@ namespace WebApiMyLib.BLL.Services
 
         public Category Update(Category category)
         {
-            var validationResult = _categoryValidationService.Validate(category);
-            if (!validationResult.IsValid)
+            
+            if (!_categoryValidationService.Validate(category).IsValid)
             {
-                throw new ValidationException(validationResult);
+                exceptions = new CategoryExceptions(_categoryValidationService.Validate(category));
             }
 
             var categoryToUpdate = _categoryRepository.Find(category.Id);
@@ -71,7 +74,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 return null;
             }
-            categoryToUpdate = _categoryRepository.Update(categoryToUpdate);
+            categoryToUpdate = _categoryRepository.Update(category);
 
             return categoryToUpdate;
         }

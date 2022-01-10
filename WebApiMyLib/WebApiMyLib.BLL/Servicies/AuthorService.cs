@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApiMyLib.BLL.Interfaces
+namespace WebApiMyLib.BLL.Servicies
 {
-    internal interface IBookService
+    internal class AuthorService
     {
     }
 }

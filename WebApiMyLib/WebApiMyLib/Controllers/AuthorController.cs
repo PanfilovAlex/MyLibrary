@@ -4,28 +4,27 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Models;
-using WebApiMyLib.BLL.Interfaces;
 
 namespace WebApiMyLib.Controllers
 {
     [Route("api/[controller]")]
     public class AuthorController : ControllerBase
     {
-        private IAuthorService _authorService;
+        private IAuthorRepository _authorRepository;
 
-        public AuthorController(IAuthorService authorService) => _authorService = authorService;
+        public AuthorController(IAuthorRepository repository) => _authorRepository = repository;
 
         [HttpGet]
         public ActionResult<IEnumerable<AuthorDto>> Get([FromQuery] BookPageParameters pageParameters)
         {
-            var authors = _authorService.Authors(pageParameters);
+            var authors = _authorRepository.Authors(pageParameters);
             return authors.Select(autor => ConvertToAuthorDto(autor)).ToList();       
         }
 
         [HttpGet("{id}")]
         public ActionResult<AuthorDto> Get(int id)
         {
-            var autor = _authorService.Find(id);
+            var autor = _authorRepository.Find(id);
             if(autor == null)
             {
                 return BadRequest();
@@ -36,19 +35,18 @@ namespace WebApiMyLib.Controllers
         [HttpPost]
         public ActionResult<Author> Post([FromBody]Author autor)
         {
-            var adeddAuthor = _authorService.Add(autor);
+            var adeddAuthor = _authorRepository.Add(autor);
             if (adeddAuthor == null)
             {
                 return BadRequest();
             }
-            var author = ConvertToAuthorDto(adeddAuthor);
-            return Ok($"ID:{author.Id}, {author.FirstName} {author.LastName} was added");
+            return Ok($"{adeddAuthor} was added");
         }
 
         [HttpPut]
         public ActionResult<Author> Put([FromBody]Author author)
         {
-            var updatedAuthor = _authorService.Update(author);
+            var updatedAuthor = _authorRepository.Update(author);
             if(updatedAuthor == null)
             {
                 return BadRequest();
@@ -58,12 +56,12 @@ namespace WebApiMyLib.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var exsistingAutor = _authorService.Find(id);
+            var exsistingAutor = _authorRepository.GetAuthors.FirstOrDefault(a => a.Id == id);
             if (exsistingAutor == null)
             {
                 return BadRequest();
             }
-            _authorService.Delete(id);
+            _authorRepository.Delete(id);
             return Ok();
         }
 

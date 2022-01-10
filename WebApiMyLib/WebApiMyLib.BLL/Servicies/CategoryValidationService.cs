@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 
-namespace WebApiMyLib.BLL.Services
+namespace WebApiMyLib.BLL.Servicies
 {
-    public class CategoryValidationService : IValidationService<Category>
+    public class CategoryValidationService:ICategoryValidationService
     {
         private ValidationResult _validationResult = new ValidationResult();
 
@@ -15,11 +18,10 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResult.AddError("Name", "Name is requared");
             }
-            if(category.Name.Trim().Any(char.IsNumber) || category.Name.Trim().Any(char.IsSymbol))
+            if(!category.Name.Trim().All(char.IsLetter))
             {
                 _validationResult.AddError("Name", "Name should contain letters");
             }
-           
             return _validationResult;
         }
     }

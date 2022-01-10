@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using WebApiMyLib.Data.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace WebApiMyLib.BLL.Interfaces
 {
-    public interface IAuthorService
+    internal interface IAuthorService
     {
-        IEnumerable<Author> GetAuthors { get;  }
-        IEnumerable<Author> Authors(BookPageParameters pageParameters);
-        Author Add(Author author);
-        Author Update(Author author);
-        Author Find(int id);
-        void Delete(int id);
     }
 }

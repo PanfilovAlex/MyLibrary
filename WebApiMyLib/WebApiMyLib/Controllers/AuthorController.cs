@@ -8,7 +8,7 @@ using WebApiMyLib.BLL.Interfaces;
 
 namespace WebApiMyLib.Controllers
 {
-    [Route("api/authors")]
+    [Route("api/[controller]")]
     public class AuthorController : ControllerBase
     {
         private IAuthorService _authorService;

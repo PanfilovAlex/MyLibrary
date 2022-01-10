@@ -22,8 +22,9 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<BookDto>> Get([FromQuery] BookPageParameters pageParameters)
+        public ActionResult<PagedListDto<BookDto>> Get([FromQuery] BookPageParameters pageParameters)
         {
+
             var books = _bookService.Books(pageParameters).ToList();
             var pagedBooks = books.Select(book => ConvertToBookDto(book)).ToList();
             

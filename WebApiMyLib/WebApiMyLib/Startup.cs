@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApiMyLib.Data.Models;
+using WebApiMyLib.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.BLL.Interfaces;
@@ -44,7 +37,15 @@ namespace WebApiMyLib
             services.AddTransient<IValidationService<Book>, BookValidationService>();
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddMvc(options => options.Filters.Add(new ExceptionFilter()));
+
+            services.AddMvc();
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "../ClientApp/build";
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -53,11 +54,25 @@ namespace WebApiMyLib
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseRouting();
+
+            // app.UseHttpsRedirection();
+            app.UseSpaStaticFiles();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    null,
-                    "{controller=Home}/{action=Index}");
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "../ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
             });
         }
     }

@@ -34,15 +34,15 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Author> Post([FromBody]Author autor)
+        public ActionResult<Author> Post([FromBody]Author author)
         {
-            var adeddAuthor = _authorService.Add(autor);
+            var adeddAuthor = _authorService.Add(author);
             if (adeddAuthor == null)
             {
                 return BadRequest();
             }
-            var author = ConvertToAuthorDto(adeddAuthor);
-            return Ok($"ID:{author.Id}, {author.FirstName} {author.LastName} was added");
+            
+            return Ok(ConvertToAuthorDto(adeddAuthor));
         }
 
         [HttpPut]
@@ -53,8 +53,10 @@ namespace WebApiMyLib.Controllers
             {
                 return BadRequest();
             }
+
             return Ok(updatedAuthor);
         }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -63,6 +65,7 @@ namespace WebApiMyLib.Controllers
             {
                 return BadRequest();
             }
+
             _authorService.Delete(id);
             return Ok();
         }

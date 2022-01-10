@@ -25,7 +25,9 @@ namespace WebApiMyLib.Controllers
         public ActionResult<IEnumerable<BookDto>> Get([FromQuery] BookPageParameters pageParameters)
         {
             var books = _bookService.Books(pageParameters).ToList();
-            return books.Select(book => ConvertToBookDto(book)).ToList();
+            var pagedBooks = books.Select(book => ConvertToBookDto(book)).ToList();
+            
+            return pagedBooks;
         }
 
         [HttpGet("{id}")]
@@ -33,18 +35,17 @@ namespace WebApiMyLib.Controllers
         {
             var book = _bookService.Find(id);
             if (book == null)
+            { 
                 return NotFound();
+            }
             var bookDto = ConvertToBookDto(book);
+
             return Ok(bookDto);
         }
 
         [HttpPost]
         public ActionResult<Book> Post([FromBody] Book book)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
             var autorsFromDb = CheckOrCreateAutor(book);
             var newBook = new Book()
             {
@@ -54,7 +55,8 @@ namespace WebApiMyLib.Controllers
                 Authors = autorsFromDb
             };
             //требует рефакторнига - выглядит убого
-            newBook =_bookService.Add(newBook);
+            newBook = _bookService.Add(newBook);
+            
             return Ok(newBook);
         }
 
@@ -70,10 +72,12 @@ namespace WebApiMyLib.Controllers
                 Categories = book.Categories
             };
             var updatedBook = _bookService.Update(newBook);
+            
             if (updatedBook == null)
             {
                 return BadRequest();
             }
+
             return Ok(updatedBook);
         }
 
@@ -100,7 +104,7 @@ namespace WebApiMyLib.Controllers
             existingAuthorIds.AddRange(checkedAutor);
             foreach (var autor in autorsFromBook)
             {
-                if(!checkedAutor.Any(a => a.LastName == autor.LastName && a.FirstName == autor.FirstName ))
+                if (!checkedAutor.Any(a => a.LastName == autor.LastName && a.FirstName == autor.FirstName))
                 {
                     existingAuthorIds.Add(_autorService.Add(autor));
                 }

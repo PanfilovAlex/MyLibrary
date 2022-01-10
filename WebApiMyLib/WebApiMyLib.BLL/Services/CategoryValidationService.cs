@@ -2,20 +2,22 @@
 using System.Linq;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
+using System.Text.RegularExpressions;
 
 namespace WebApiMyLib.BLL.Services
 {
     public class CategoryValidationService : IValidationService<Category>
     {
-        private ValidationResult _validationResult = new ValidationResult();
-
+        private string pattern = "^[a-zA-zа-яА-Я]+$";
         public ValidationResult Validate(Category category)
         {
-            if (category.Name.Trim().Length == 0)
+            var _validationResult = new ValidationResult();
+
+            if(category.Name.Trim().Length == 0)
             {
                 _validationResult.AddError("Name", "Name is requared");
             }
-            if(category.Name.Trim().Any(char.IsNumber) || category.Name.Trim().Any(char.IsSymbol))
+            if(!Regex.IsMatch(category.Name, pattern))
             {
                 _validationResult.AddError("Name", "Name should contain letters");
             }

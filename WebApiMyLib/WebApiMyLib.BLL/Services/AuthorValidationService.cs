@@ -1,12 +1,15 @@
 ﻿using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace WebApiMyLib.BLL.Services
 {
     public class AuthorValidationService : IValidationService<Author>
     {
         private ValidationResult _validationResul = new ValidationResult();
+
+        private string pattern = "^[a-zA-zа-яА-Я]+$";
         public ValidationResult Validate(Author author)
         {
             if (author == null)
@@ -21,7 +24,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResul.AddError("First Name", "Name should be more than 2 symbols and lesser than 50 symbols");
             }
-            if (author.FirstName.Trim().Any(char.IsNumber) || author.FirstName.Trim().Any(char.IsSymbol))
+            if (!Regex.IsMatch(author.FirstName.Trim(), pattern))
             {
                 _validationResul.AddError("Name", "Name shyould contain letters");
             }
@@ -29,7 +32,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResul.AddError("Last Name", "Last Name cant' be empty");
             }
-            if(author.LastName.Trim().Any(char.IsNumber) || author.LastName.Trim().Any(char.IsSymbol))
+            if(!Regex.IsMatch(author.LastName.Trim(), pattern))
             {
                 _validationResul.AddError("Last Name", "Last Name should contain letters");
             }

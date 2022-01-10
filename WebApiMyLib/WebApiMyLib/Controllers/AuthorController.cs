@@ -13,7 +13,7 @@ namespace WebApiMyLib.Controllers
     {
         private IAuthorService _authorService;
 
-        public AuthorController(IAuthorService repository) => _authorService = repository;
+        public AuthorController(IAuthorService authorService) => _authorService = authorService;
 
         [HttpGet]
         public ActionResult<IEnumerable<AuthorDto>> Get([FromQuery] BookPageParameters pageParameters)

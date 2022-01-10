@@ -5,12 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Hosting;
-using WebApiMyLib.Models;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.BLL.Services;
 using WebApiMyLib.Filters;
+using WebApiMyLib.Data.Models;
 
 namespace WebApiMyLib
 {

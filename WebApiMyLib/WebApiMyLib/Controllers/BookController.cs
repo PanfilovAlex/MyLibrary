@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiMyLib.Models;
 using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Data.Models;
-using WebApiMyLib.Data.Repositories;
+using WebApiMyLib.BLL.Interfaces;
 
 namespace WebApiMyLib.Controllers
 {
@@ -13,25 +13,26 @@ namespace WebApiMyLib.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private IBookRepository _bookRepository;
-        private IAuthorRepository _autorRepository;
-        public BookController(IBookRepository bookRepository, IAuthorRepository autorRepository)
+        private IBookService _bookService;
+        private IAuthorService _autorService;
+        public BookController(IBookService bookService, IAuthorService autorService)
         {
-            _bookRepository = bookRepository;
-            _autorRepository = autorRepository;
+            _bookService = bookService;
+            _autorService = autorService;
         }
 
         [HttpGet]
         public ActionResult<PagedListDto<BookDto>> Get([FromQuery] BookPageParameters pageParameters)
         {
-            var books = _bookRepository.Books(pageParameters);
-            return new PagedListDto<BookDto>(books.Select((b) => ConvertToBookDto(b)).ToList(), books.TotalCount);
+
+            var books = _bookService.Books(pageParameters).ToList();
+            return books.Select(book => ConvertToBookDto(book)).ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<BookDto> Get(int id)
         {
-            var book = _bookRepository.Find(id);
+            var book = _bookService.Find(id);
             if (book == null)
                 return NotFound();
             var bookDto = ConvertToBookDto(book);
@@ -54,8 +55,8 @@ namespace WebApiMyLib.Controllers
                 Authors = autorsFromDb
             };
             //требует рефакторнига - выглядит убого
-            var createdBook = _bookRepository.AddBook(newBook);
-            return Ok(createdBook);
+            newBook =_bookService.Add(newBook);
+            return Ok(newBook);
         }
 
         [HttpPut]
@@ -69,7 +70,7 @@ namespace WebApiMyLib.Controllers
                 Authors = authorsFromBook,
                 Categories = book.Categories
             };
-            var updatedBook = _bookRepository.UpdateBook(newBook);
+            var updatedBook = _bookService.Update(newBook);
             if (updatedBook == null)
             {
                 return BadRequest();
@@ -80,12 +81,12 @@ namespace WebApiMyLib.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var exsitingBook = _bookRepository.Find(id);
+            var exsitingBook = _bookService.Find(id);
             if (exsitingBook == null)
             {
                 return NotFound();
             }
-            _bookRepository.DeleteBook(id);
+            _bookService.Delete(id);
             return Ok("Book was deleted");
         }
 
@@ -93,7 +94,7 @@ namespace WebApiMyLib.Controllers
         {
             var autorsFromBook = book.Authors;
             var existingAuthorIds = new List<Author>();
-            var checkedAutor = _autorRepository.GetAuthors
+            var checkedAutor = _autorService.GetAuthors
                    .Where((a) => autorsFromBook.Select((afb) => afb.LastName).Contains(a.LastName)
                    && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName))
                    .ToList();
@@ -102,7 +103,7 @@ namespace WebApiMyLib.Controllers
             {
                 if(!checkedAutor.Any(a => a.LastName == autor.LastName && a.FirstName == autor.FirstName ))
                 {
-                    existingAuthorIds.Add(_autorRepository.Add(autor));
+                    existingAuthorIds.Add(_autorService.Add(autor));
                 }
             }
             return existingAuthorIds;

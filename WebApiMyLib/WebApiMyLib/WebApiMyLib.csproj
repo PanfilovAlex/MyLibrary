@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="lib\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

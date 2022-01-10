@@ -19,6 +19,7 @@ namespace WebApiMyLib.Data.Repositories
         public PagedList<Book> Books(BookPageParameters pageParameters)
         {
             var books = bookContext.Books
+             .AsNoTracking()
              .Where(book => !book.IsDeleted)
              .OrderBy(b => b.Id)
              .Include(c => c.Categories)
@@ -64,10 +65,10 @@ namespace WebApiMyLib.Data.Repositories
         public Book UpdateBook(Book book)
         {
             var updatedBook = bookContext.Books.Include(a => a.Authors).Include(c => c.Categories).FirstOrDefault(i => i.Id == book.Id);
-            
+
             var authors = bookContext.Authors.Where(a => book.Authors.Select(bId => bId.Id).Contains(a.Id)).ToList();
             var categoies = bookContext.Categories.Where(c => book.Categories.Select(cId => cId.Id).Contains(c.Id)).ToList();
-            
+
             if (updatedBook != null)
             {
                 updatedBook.Title = book.Title;
@@ -94,8 +95,8 @@ namespace WebApiMyLib.Data.Repositories
         private IQueryable<Book> SortBy(IQueryable<Book> books, string sortBy)
         {
             if (!books.Any() || string.IsNullOrWhiteSpace(sortBy))
-            { 
-                return books; 
+            {
+                return books;
             }
 
             switch (sortBy)
@@ -118,13 +119,13 @@ namespace WebApiMyLib.Data.Repositories
             var checkedAutor = bookContext.Authors
                    .Where((a) => autorsFromBook.Select((afb) => afb.LastName).Contains(a.LastName)
                    && autorsFromBook.Select((afb) => afb.FirstName).Contains(a.FirstName)).ToList();
-            if(checkedAutor != null)
+            if (checkedAutor != null)
             {
                 existingAuthorIds.AddRange(checkedAutor);
             }
             foreach (var autor in autorsFromBook)
             {
-                if(autor.FirstName!.Equals(checkedAutor.FirstOrDefault().FirstName) 
+                if (autor.FirstName!.Equals(checkedAutor.FirstOrDefault().FirstName)
                     && autor.LastName!.Equals(checkedAutor.FirstOrDefault().LastName))
                 {
                     bookContext.Authors.Add(new Author
@@ -135,7 +136,7 @@ namespace WebApiMyLib.Data.Repositories
                     bookContext.SaveChanges();
                     existingAuthorIds.Add(bookContext.Authors.FirstOrDefault(a => a.LastName.Equals(autor.LastName)
                     && a.FirstName.Equals(autor.FirstName)));
-                }    
+                }
             }
             return existingAuthorIds;
         }

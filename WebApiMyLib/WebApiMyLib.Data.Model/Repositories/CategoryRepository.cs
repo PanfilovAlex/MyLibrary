@@ -42,7 +42,6 @@ namespace WebApiMyLib.Data.Repositories
         {
             var updatedCategory = _repository.Categories.FirstOrDefault(c => c.Id == category.Id);
             updatedCategory.Name = category.Name;
-            updatedCategory.IsChosen = category.IsChosen;
             updatedCategory.IsDeleted = category.IsDeleted;
 
             _repository.SaveChanges();

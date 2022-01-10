@@ -12,7 +12,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiMyLib.BLL", "WebApiMy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiMyLib.Data", "WebApiMyLib.Data.Model\WebApiMyLib.Data.csproj", "{7B8C272B-1D06-4079-B8F7-E06331C095A8}"
 EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiMyLib.BLL", "WebApiMyLib.BLL\WebApiMyLib.BLL.csproj", "{59E6796E-A025-476C-965E-F65F55EDC83F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{919B4B5A-2CE8-4F53-BF8F-029BCDA84C92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiMyLib.BLL.Tests", "WebApiMyLib.BLL.Tests\WebApiMyLib.BLL.Tests.csproj", "{3D4636F3-39BB-4F54-BC50-AD11F40B8A89}"
+
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ClientApp", "ClientApp\ClientApp.esproj", "{E3959814-C50A-485F-8B33-55FF70A667CF}"
+
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +36,12 @@ Global
 		{59E6796E-A025-476C-965E-F65F55EDC83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59E6796E-A025-476C-965E-F65F55EDC83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59E6796E-A025-476C-965E-F65F55EDC83F}.Release|Any CPU.Build.0 = Release|Any CPU
+
+		{3D4636F3-39BB-4F54-BC50-AD11F40B8A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D4636F3-39BB-4F54-BC50-AD11F40B8A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D4636F3-39BB-4F54-BC50-AD11F40B8A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D4636F3-39BB-4F54-BC50-AD11F40B8A89}.Release|Any CPU.Build.0 = Release|Any CPU
+
 		{7B8C272B-1D06-4079-B8F7-E06331C095A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B8C272B-1D06-4079-B8F7-E06331C095A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B8C272B-1D06-4079-B8F7-E06331C095A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,9 +52,13 @@ Global
 		{E3959814-C50A-485F-8B33-55FF70A667CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3959814-C50A-485F-8B33-55FF70A667CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3959814-C50A-485F-8B33-55FF70A667CF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D4636F3-39BB-4F54-BC50-AD11F40B8A89} = {919B4B5A-2CE8-4F53-BF8F-029BCDA84C92}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E250DED7-4743-4F1B-B359-D92AC99A82AF}

@@ -2,7 +2,7 @@
 
 namespace WebApiMyLib.Data.Models
 {
-    public abstract class PageParameters
+    public class PageParameters
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;

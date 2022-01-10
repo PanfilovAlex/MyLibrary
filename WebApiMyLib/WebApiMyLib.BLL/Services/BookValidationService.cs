@@ -19,7 +19,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResult.AddError("Title", "Title can't be empty");
             }
-
+            
             return _validationResult;
         }
     }

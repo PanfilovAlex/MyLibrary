@@ -1,5 +1,6 @@
 ﻿using Moq;
 using System;
+using System.Collections.Generic;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.BLL.Services;
 using WebApiMyLib.Data.Models;
@@ -57,6 +58,25 @@ namespace WebApiMyLib.BLL.Tests
             // Assert
             Assert.Null(result);
             categoryRepositoryMock.Verify(m => m.Add(category), Times.Once);
+        }
+
+
+        [Fact]
+        public void Delete_ShouldNotCallRepositoryDelete_IfCategoryNotExists()
+        {
+            // Arrange
+            var categoryRepositoryMock = new Mock<ICategoryRepository>();
+            categoryRepositoryMock
+                .Setup(m => m.Categories)
+                .Returns(new List<Category>());
+            
+            var categoryService = new CategoryService(categoryRepositoryMock.Object, null);
+            
+            // Act
+            categoryService.Delete(5);
+
+            //Assert 
+            categoryRepositoryMock.Verify(m => m.Delete(It.IsAny<int>()), Times.Never);
         }
     }
 }

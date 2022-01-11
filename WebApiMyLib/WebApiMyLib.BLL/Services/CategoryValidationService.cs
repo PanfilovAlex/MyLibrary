@@ -8,7 +8,7 @@ namespace WebApiMyLib.BLL.Services
 {
     public class CategoryValidationService : IValidationService<Category>
     {
-        private string pattern = "^[a-zA-zа-яА-Я]+$";
+        private string pattern = "^[a-zA-zа-яА-Я ]+$";
         public ValidationResult Validate(Category category)
         {
             var _validationResult = new ValidationResult();
@@ -17,7 +17,7 @@ namespace WebApiMyLib.BLL.Services
             {
                 _validationResult.AddError("Name", "Name is requared");
             }
-            if(!Regex.IsMatch(category.Name, pattern))
+            if(!Regex.IsMatch(category.Name.Trim(), pattern))
             {
                 _validationResult.AddError("Name", "Name should contain letters");
             }

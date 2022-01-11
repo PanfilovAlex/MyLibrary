@@ -21,7 +21,7 @@ namespace WebApiMyLib.Data.Repositories
             
             _repository.Categories.Add(newCategory);
             _repository.SaveChanges();
-            return _repository.Categories.FirstOrDefault(a => a.Name.Equals(newCategory.Name));
+            return newCategory;
         }
 
         public void Delete(int id)

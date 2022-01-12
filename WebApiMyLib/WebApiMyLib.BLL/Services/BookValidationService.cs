@@ -14,7 +14,6 @@ namespace WebApiMyLib.BLL.Services
         private ValidationResult _validationResult = new ValidationResult();
         public ValidationResult Validate(Book book)
         {
-
             if (book.Title.Trim().Length == 0)
             {
                 _validationResult.AddError("Title", "Title can't be empty");

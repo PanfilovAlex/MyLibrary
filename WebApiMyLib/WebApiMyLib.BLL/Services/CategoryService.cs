@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
@@ -20,22 +21,23 @@ namespace WebApiMyLib.BLL.Services
 
         public Category Add(Category category)
         {
+            var addedCategory = new Category();
             var validationResult = _categoryValidationService.Validate(category);
             if (!validationResult.IsValid)
             {
-                var validator = validationResult.Errors;
                 throw new ValidationException(validationResult);
             }
 
             try
             {
-                _categoryRepository.Add(category);
+               addedCategory = _categoryRepository.Add(category);
             }
             catch
             {
-                return null;
+                throw new Exception("Category was not added");
             }
-            return _categoryRepository.Categories.FirstOrDefault(a => a.Name.Equals(category.Name));
+
+            return addedCategory;
         }
 
         public void Delete(int id)
@@ -53,25 +55,28 @@ namespace WebApiMyLib.BLL.Services
             var foundCatgory = _categoryRepository.Find(id);
             if (foundCatgory == null)
             {
-                return null;
+                throw new Exception("Category wasn't found");
             }
             return foundCatgory;
         }
 
         public Category Update(Category category)
         {
+            var categoryToUpdate = new Category();
             var validationResult = _categoryValidationService.Validate(category);
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult);
             }
 
-            var categoryToUpdate = _categoryRepository.Find(category.Id);
-            if (categoryToUpdate == null)
+            try
             {
-                return null;
+                categoryToUpdate = _categoryRepository.Update(categoryToUpdate);
             }
-            categoryToUpdate = _categoryRepository.Update(categoryToUpdate);
+            catch
+            {
+                throw new Exception("Category was not found");
+            }
 
             return categoryToUpdate;
         }

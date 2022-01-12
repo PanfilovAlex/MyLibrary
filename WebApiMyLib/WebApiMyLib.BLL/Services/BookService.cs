@@ -40,7 +40,7 @@ namespace WebApiMyLib.BLL.Services
             return _bookRepository.GetBooks.FirstOrDefault(a => a.Title == book.Title);
         }
 
-        public IEnumerable<Book> Books(BookPageParameters pageParameters)
+        public PagedList<Book> Books(BookPageParameters pageParameters)
         => _bookRepository.Books(pageParameters);
 
         public void Delete(int id)

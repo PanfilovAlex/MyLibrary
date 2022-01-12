@@ -15,12 +15,27 @@ namespace WebApiMyLib.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Category> Get() => _categoryService.Categories;
+        public IEnumerable<Category> Get() 
+        { 
+            return _categoryService.Categories;
+        }
 
         [HttpGet("{id}")]
-        public Category Get(int id) => _categoryService.Find(id);
+        public Category Get(int id)
+        {
+           return _categoryService.Find(id);
+        } 
 
         [HttpPost]
-        public Category Post([FromBody]Category category) => _categoryService.Add(category);
+        public Category Post([FromBody]Category category)
+        { 
+            return _categoryService.Add(category);
+        }
+        
+        [HttpPut]
+        public Category Put([FromBody]Category category)
+        {
+            return _categoryService.Update(category);
+        }
     }
 }

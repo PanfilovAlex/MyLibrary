@@ -11,7 +11,7 @@ using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.BLL.Services;
 using WebApiMyLib.Filters;
-using WebApiMyLib.Data.Models;
+
 
 namespace WebApiMyLib
 {

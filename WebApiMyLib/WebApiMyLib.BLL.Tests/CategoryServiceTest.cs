@@ -60,6 +60,29 @@ namespace WebApiMyLib.BLL.Tests
             categoryRepositoryMock.Verify(m => m.Add(category), Times.Once);
         }
 
+        [Fact]
+        public void Add_ShouldReturnCategoty_IfRespositiryAddCategory()
+        {
+            // Arrange
+            var category = new Category();
+            var categoryRepositoryMock = new Mock<ICategoryRepository>();
+            categoryRepositoryMock.
+                Setup(m => m.Add(category))
+                .Returns(category);
+
+            var categoryValidationServiceMock = new Mock<IValidationService<Category>>();
+            categoryValidationServiceMock
+                .Setup(m => m.Validate(It.IsAny<Category>()))
+                .Returns(new ValidationResult());
+
+            var categoryService = new CategoryService(categoryRepositoryMock.Object, categoryValidationServiceMock.Object);
+
+            // Act
+            var result = categoryService.Add(category);
+
+            // Assert 
+            Assert.Same(result, category);
+        }
 
         [Fact]
         public void Delete_ShouldNotCallRepositoryDelete_IfCategoryNotExists()
@@ -69,15 +92,10 @@ namespace WebApiMyLib.BLL.Tests
             categoryRepositoryMock
                 .Setup(m => m.Categories)
                 .Returns(new List<Category>());
-<<<<<<< HEAD
             
             var categoryService = new CategoryService(categoryRepositoryMock.Object, null);
             
-=======
 
-            var categoryService = new CategoryService(categoryRepositoryMock.Object, null);
-
->>>>>>> 2f382b7102185eb666defb70b4b595b447dd84f6
             // Act
             categoryService.Delete(5);
 

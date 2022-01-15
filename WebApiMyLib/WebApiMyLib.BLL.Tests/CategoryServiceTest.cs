@@ -69,9 +69,15 @@ namespace WebApiMyLib.BLL.Tests
             categoryRepositoryMock
                 .Setup(m => m.Categories)
                 .Returns(new List<Category>());
+<<<<<<< HEAD
             
             var categoryService = new CategoryService(categoryRepositoryMock.Object, null);
             
+=======
+
+            var categoryService = new CategoryService(categoryRepositoryMock.Object, null);
+
+>>>>>>> 2f382b7102185eb666defb70b4b595b447dd84f6
             // Act
             categoryService.Delete(5);
 

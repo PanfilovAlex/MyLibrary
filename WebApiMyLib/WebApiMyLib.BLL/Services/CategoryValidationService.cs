@@ -8,7 +8,7 @@ namespace WebApiMyLib.BLL.Services
 {
     public class CategoryValidationService : IValidationService<Category>
     {
-        private string pattern = "^[a-zA-zа-яА-Я ]+$";
+        private string pattern = "^[a-zA-zа-яА-Я- ]+$";
         public ValidationResult Validate(Category category)
         {
             var _validationResult = new ValidationResult();

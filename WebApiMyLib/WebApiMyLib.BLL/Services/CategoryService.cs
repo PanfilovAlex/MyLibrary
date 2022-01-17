@@ -32,14 +32,12 @@ namespace WebApiMyLib.BLL.Services
 
             try
             {
-               addedCategory = _categoryRepository.Add(category);
+               return _categoryRepository.Add(category);
             }
             catch(Exception ex)
             {
                 throw;
             }
-
-            return addedCategory;
         }
 
         public void Delete(int id)
@@ -64,7 +62,6 @@ namespace WebApiMyLib.BLL.Services
 
         public Category Update(Category category)
         {
-            var categoryToUpdate = new Category();
             var validationResult = _categoryValidationService.Validate(category);
             if (!validationResult.IsValid)
             {
@@ -73,14 +70,12 @@ namespace WebApiMyLib.BLL.Services
 
             try
             {
-                categoryToUpdate = _categoryRepository.Update(category);
+                return _categoryRepository.Update(category);
             }
             catch
             {
                 throw new Exception("Category was not found");
             }
-
-            return categoryToUpdate;
         }
     }
 }

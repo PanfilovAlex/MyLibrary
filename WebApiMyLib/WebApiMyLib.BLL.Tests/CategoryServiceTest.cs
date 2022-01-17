@@ -136,8 +136,8 @@ namespace WebApiMyLib.BLL.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(result.Id, DemoCategory().Id);
-            Assert.Equal(result.Name, DemoCategory().Name);
+            Assert.Equal(DemoCategory().Id, result.Id);
+            Assert.Equal(DemoCategory().Name, result.Name);
         }
 
         [Fact]
@@ -183,10 +183,10 @@ namespace WebApiMyLib.BLL.Tests
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(result.Id, DemoCategory().Id);
-            Assert.Equal(result.Name, DemoCategory().Name); 
-            Assert.Equal(result.Books, DemoCategory().Books);
-            Assert.Equal(result.IsDeleted, DemoCategory().IsDeleted);
+            Assert.Equal(DemoCategory().Id, result.Id);
+            Assert.Equal(DemoCategory().Name, result.Name); 
+            Assert.Equal(DemoCategory().Books, result.Books);
+            Assert.Equal(DemoCategory().IsDeleted, result.IsDeleted);
         }
 
         [Fact]

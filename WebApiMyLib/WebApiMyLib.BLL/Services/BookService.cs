@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
@@ -17,6 +18,10 @@ namespace WebApiMyLib.BLL.Services
         }
         public IEnumerable<Book> GetBooks => _bookRepository.GetBooks;
 
+        public PagedList<Book> Books(BookPageParameters pageParameters)
+        => _bookRepository.Books(pageParameters, book => book.IsDeleted == false);
+
+
         public Book Add(Book book)
         {
             var validationResult = _bookValidationService.Validate(book);
@@ -28,14 +33,11 @@ namespace WebApiMyLib.BLL.Services
             {
                 return _bookRepository.AddBook(book);
             }
-            catch
+            catch(Exception ex)
             {
-                return null;
+                throw;
             }
         }
-
-        public PagedList<Book> Books(BookPageParameters pageParameters)
-        => _bookRepository.Books(pageParameters, book => book.IsDeleted == false);
 
         public void Delete(int id)
         {
@@ -52,14 +54,13 @@ namespace WebApiMyLib.BLL.Services
             var bookToFind = _bookRepository.Find(id);
             if (bookToFind == null)
             {
-                return null;
+                throw new Exception("Book was not found!");
             }
             return bookToFind;
         }
 
         public Book Update(Book book)
         {
-            var bookToUpdate = new Book();
             var validationResult = _bookValidationService.Validate(book);
             if (!validationResult.IsValid)
             {
@@ -67,14 +68,12 @@ namespace WebApiMyLib.BLL.Services
             }
             try
             {
-                bookToUpdate = _bookRepository.UpdateBook(book);
+                return _bookRepository.UpdateBook(book);
             }
-            catch
+            catch(Exception e)
             {
-                return null;
+                throw;
             }
-
-            return bookToUpdate;
         }
     }
 }

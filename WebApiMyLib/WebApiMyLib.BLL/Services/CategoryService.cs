@@ -17,9 +17,9 @@ namespace WebApiMyLib.BLL.Services
             _categoryRepository = categoryRepository;
             _categoryValidationService = categoryValidationService;
         }
-        public IEnumerable<Category> Categories => _categoryRepository.Categories
-            .Where(c => !c.IsDeleted)
-            .ToList();
+        public IEnumerable<Category> Categories => 
+            _categoryRepository
+            .GetCategories(x => x.IsDeleted == false);
 
         public Category Add(Category category)
         {

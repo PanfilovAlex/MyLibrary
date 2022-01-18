@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
@@ -22,7 +23,7 @@ namespace WebApiMyLib.BLL.Services
 
         public IEnumerable<Author> GetAuthors => _authorRepository.GetAuthors;
         public IEnumerable<Author> Authors(BookPageParameters pageParameters)
-            => _authorRepository.Authors(pageParameters);
+            => _authorRepository.Authors(pageParameters, author => author.IsDeleted == true);
 
         public Author Add(Author author)
         {

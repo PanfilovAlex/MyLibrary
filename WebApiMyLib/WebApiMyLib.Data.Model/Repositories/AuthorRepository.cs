@@ -2,6 +2,8 @@
 using System.Linq;
 using WebApiMyLib.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System;
 
 namespace WebApiMyLib.Data.Repositories
 {
@@ -12,9 +14,10 @@ namespace WebApiMyLib.Data.Repositories
         public AuthorRepository(BookDbContext context) => _autorContext = context;
 
         public IEnumerable<Author> GetAuthors => _autorContext.Authors;
-        public IEnumerable<Author> Authors(BookPageParameters pageParameters)
+        public IEnumerable<Author> Authors(BookPageParameters pageParameters, 
+            Expression<Func<Author, bool>> expression)
         {
-            var authors = _autorContext.Authors.Where(author => !author.IsDeleted)
+            var authors = _autorContext.Authors.Where(expression)
                 .Include(books => books.Books.Where(book => !book.IsDeleted));
 
             return PagedList<Author>.ToPagedList(authors, pageParameters.PageNumber, pageParameters.PageSize);

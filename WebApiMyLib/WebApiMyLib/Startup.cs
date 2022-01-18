@@ -38,7 +38,10 @@ namespace WebApiMyLib
             services.AddTransient<IValidationService<Book>, BookValidationService>();
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
+            services.AddControllers(options => 
+            {
+                options.Filters.Add(new ExceptionFilter());
+            });
             services.AddMvc();
 
             // In production, the React files will be served from this directory

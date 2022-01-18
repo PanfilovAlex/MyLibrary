@@ -20,8 +20,7 @@ namespace WebApiMyLib.BLL.Services
                 {
                     _validationResult.AddError("Title", "Title can't be empty");
                 }
-                if(book.Authors.Any(a => a.FirstName.Length == 0) 
-                    || book.Authors.Any(a => a.LastName.Length == 0))
+                if(book.Authors.Count == 0)
                 {
                     _validationResult.AddError("Authors", "Authors were not added");
                 }

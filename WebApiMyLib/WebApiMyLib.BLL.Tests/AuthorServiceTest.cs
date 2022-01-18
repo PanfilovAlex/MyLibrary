@@ -32,7 +32,7 @@ namespace WebApiMyLib.BLL.Tests
         }
 
         [Fact]
-        public void Add_ShouldReturnAuthor_IfRepositoryAddAuthor()
+        public void Add_ShouldReturnAuthor_IfAuthorWasAddedSuccessfully()
         {
             //Arrange
             var authorToAdd = new Author()
@@ -61,7 +61,7 @@ namespace WebApiMyLib.BLL.Tests
         }
 
         [Fact]
-        public void Add_ShouldThrowException_IfRepositoryAuthorNotAdded()
+        public void Add_ShouldThrowException_IfRepositoryAuthorWasNotAdded()
         {
             // Arrange
             var authorValidationServiceMock = new Mock<IValidationService<Author>>();
@@ -86,7 +86,7 @@ namespace WebApiMyLib.BLL.Tests
         }
 
         [Fact]
-        public void Delete_ShouldThrowException_IfAuthorNotExcists()
+        public void Delete_ShouldThrowException_IfAuthorNotExists()
         {
             // Arrange
             var authorRepositoryServiceMock = new Mock<IAuthorRepository>();
@@ -122,13 +122,13 @@ namespace WebApiMyLib.BLL.Tests
         }
 
         [Fact]
-        public void Find_ShouldReturnAuthor_IfRepositoryAddAuthor()
+        public void Find_ShouldReturnAuthor_IfAuthorExists()
         {
             // Arrange
             var authorRepositoryMock = new Mock<IAuthorRepository>();
             authorRepositoryMock
                 .Setup(m => m.Find(It.IsAny<int>()))
-                .Returns(DemoAuthor());
+                .Returns(TestAuthor());
 
             var authorService = new AuthorService(authorRepositoryMock.Object, null);
 
@@ -137,12 +137,12 @@ namespace WebApiMyLib.BLL.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(DemoAuthor().Id, result.Id);
-            Assert.Equal(DemoAuthor().FirstName, result.FirstName);
-            Assert.Equal(DemoAuthor().LastName, result.LastName); 
-            
+            Assert.Equal(TestAuthor().Id, result.Id);
+            Assert.Equal(TestAuthor().FirstName, result.FirstName);
+            Assert.Equal(TestAuthor().LastName, result.LastName);
         }
-        Author DemoAuthor()
+
+        private Author TestAuthor()
         {
             return new Author()
             {

@@ -121,13 +121,13 @@ namespace WebApiMyLib.BLL.Tests
         }
 
         [Fact]
-        public void Find_ShouldReturnCategory_IfRepositoryAddCategorySuccesfuly()
+        public void Find_ShouldReturnCategory_IfCategoryExists()
         {
             // Arrange
             var categoryRepositoryMock = new Mock<ICategoryRepository>();
             categoryRepositoryMock
                 .Setup(m => m.Find(It.IsAny<int>()))
-                .Returns(DemoCategory());
+                .Returns(TestCategory());
 
             var categoryService = new CategoryService(categoryRepositoryMock.Object, null);
 
@@ -136,12 +136,12 @@ namespace WebApiMyLib.BLL.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(DemoCategory().Id, result.Id);
-            Assert.Equal(DemoCategory().Name, result.Name);
+            Assert.Equal(TestCategory().Id, result.Id);
+            Assert.Equal(TestCategory().Name, result.Name);
         }
 
         [Fact]
-        public void Update_ShouldThrowValidException_IfCategoryIsNotValid()
+        public void Update_ShouldThrowException_IfCategoryIsNotValid()
         {
             // Arange
             var categoryValidationServiceMock = new Mock<IValidationService<Category>>();
@@ -154,6 +154,7 @@ namespace WebApiMyLib.BLL.Tests
 
             var categoryService = new CategoryService(null, categoryValidationServiceMock.Object);
             var category = new Category();
+
             // Act
             Action action = () => categoryService.Update(category);
 
@@ -173,20 +174,20 @@ namespace WebApiMyLib.BLL.Tests
             var categoryRepositoryMock = new Mock<ICategoryRepository>();
             categoryRepositoryMock
                 .Setup(m => m.Update(It.IsAny<Category>()))
-                .Returns(DemoCategory());
+                .Returns(TestCategory());
 
-            var categoryService = new CategoryService(categoryRepositoryMock.Object, 
+            var categoryService = new CategoryService(categoryRepositoryMock.Object,
                 categoryValidarionServiceMock.Object);
-            
+
             //Act 
-            var result = categoryService.Update(DemoCategory());
+            var result = categoryService.Update(TestCategory());
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(DemoCategory().Id, result.Id);
-            Assert.Equal(DemoCategory().Name, result.Name); 
-            Assert.Equal(DemoCategory().Books, result.Books);
-            Assert.Equal(DemoCategory().IsDeleted, result.IsDeleted);
+            Assert.Equal(TestCategory().Id, result.Id);
+            Assert.Equal(TestCategory().Name, result.Name);
+            Assert.Equal(TestCategory().Books, result.Books);
+            Assert.Equal(TestCategory().IsDeleted, result.IsDeleted);
         }
 
         [Fact]
@@ -203,18 +204,18 @@ namespace WebApiMyLib.BLL.Tests
                 .Setup(m => m.Update(It.IsAny<Category>()))
                 .Throws(new Exception());
 
-            var categoryService = new CategoryService(categoryRepository.Object, 
+            var categoryService = new CategoryService(categoryRepository.Object,
                categoryValidationServiceMock.Object);
-            
+
             // Act
-            Action action = () => categoryService.Update(DemoCategory());
+            Action action = () => categoryService.Update(TestCategory());
 
             //Assert
             Assert.Throws<Exception>(action);
             categoryRepository.Verify(i => i.Update(It.IsAny<Category>()), Times.Once);
         }
 
-        Category DemoCategory()
+        private Category TestCategory()
         {
             return new Category()
             {

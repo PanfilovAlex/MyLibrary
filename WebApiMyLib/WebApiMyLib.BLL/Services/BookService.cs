@@ -30,18 +30,16 @@ namespace WebApiMyLib.BLL.Services
             }
             try
             {
-                _bookRepository.AddBook(book);
+                return _bookRepository.AddBook(book);
             }
             catch
             {
                 return null;
             }
-
-            return _bookRepository.GetBooks.FirstOrDefault(a => a.Title == book.Title);
         }
 
         public PagedList<Book> Books(BookPageParameters pageParameters)
-        => _bookRepository.Books(pageParameters);
+        => _bookRepository.Books(pageParameters, book => book.IsDeleted == false);
 
         public void Delete(int id)
         {
@@ -73,7 +71,7 @@ namespace WebApiMyLib.BLL.Services
             }
             try
             {
-               bookToUpdate = _bookRepository.UpdateBook(book);
+                bookToUpdate = _bookRepository.UpdateBook(book);
             }
             catch
             {

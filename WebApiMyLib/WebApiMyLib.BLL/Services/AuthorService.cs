@@ -23,7 +23,7 @@ namespace WebApiMyLib.BLL.Services
 
         public IEnumerable<Author> GetAuthors => _authorRepository.GetAuthors;
         public IEnumerable<Author> Authors(BookPageParameters pageParameters)
-            => _authorRepository.Authors(pageParameters, author => author.IsDeleted == true);
+            => _authorRepository.Authors(pageParameters, author => author.IsDeleted == false);
 
         public Author Add(Author author)
         {

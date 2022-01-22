@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
@@ -13,7 +14,8 @@ namespace WebApiMyLib.BLL.Services
         private IAuthorRepository _authorRepository;
         private IValidationService<Author> _validationService;
 
-        public AuthorService(IValidationService<Author> validationService, IAuthorRepository authorRepository)
+        public AuthorService(IAuthorRepository authorRepository,
+            IValidationService<Author> validationService)
         {
             _authorRepository = authorRepository;
             _validationService = validationService;
@@ -21,11 +23,10 @@ namespace WebApiMyLib.BLL.Services
 
         public IEnumerable<Author> GetAuthors => _authorRepository.GetAuthors;
         public IEnumerable<Author> Authors(BookPageParameters pageParameters)
-            => _authorRepository.Authors(pageParameters);
+            => _authorRepository.Authors(pageParameters, author => author.IsDeleted == false);
 
         public Author Add(Author author)
         {
-            var addedAuthor = new Author();
             var validationResult = _validationService.Validate(author);
             if (!validationResult.IsValid)
             {
@@ -33,14 +34,12 @@ namespace WebApiMyLib.BLL.Services
             }
             try
             {
-                addedAuthor = _authorRepository.Add(author);
+                return _authorRepository.Add(author);
             }
-            catch
+            catch(Exception ex)
             {
-                return null;
+                throw;
             }
-
-            return addedAuthor;
         }
 
         public void Delete(int id)
@@ -57,9 +56,9 @@ namespace WebApiMyLib.BLL.Services
         public Author Find(int id)
         {
             var foundAuthor = _authorRepository.Find(id);
-            if(foundAuthor == null)
+            if (foundAuthor == null)
             {
-                return null;
+                throw new Exception("Author was not added");
             }
 
             return foundAuthor;

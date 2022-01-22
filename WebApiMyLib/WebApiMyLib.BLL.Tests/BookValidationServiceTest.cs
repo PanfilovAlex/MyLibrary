@@ -41,6 +41,5 @@ namespace WebApiMyLib.BLL.Tests
             //Assert
             Assert.False(isValid);
         }
-
     }
 }

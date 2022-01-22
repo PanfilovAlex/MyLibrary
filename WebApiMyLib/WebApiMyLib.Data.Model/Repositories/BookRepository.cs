@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Data.Models;
 
@@ -16,11 +17,12 @@ namespace WebApiMyLib.Data.Repositories
         }
 
         public IEnumerable<Book> GetBooks => bookContext.Books;
-        public PagedList<Book> Books(BookPageParameters pageParameters)
+        public PagedList<Book> Books(BookPageParameters pageParameters, 
+            Expression<Func<Book, bool>> expression)
         {
             var books = bookContext.Books
              .AsNoTracking()
-             .Where(book => !book.IsDeleted)
+             .Where(expression)
              .OrderBy(b => b.Id)
              .Include(c => c.Categories)
              .Include(a => a.Authors.Where(a => !a.IsDeleted));

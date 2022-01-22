@@ -14,11 +14,21 @@ namespace WebApiMyLib.BLL.Services
         private ValidationResult _validationResult = new ValidationResult();
         public ValidationResult Validate(Book book)
         {
-            if (book.Title.Trim().Length == 0)
+            if (book.Title != null)
             {
-                _validationResult.AddError("Title", "Title can't be empty");
+                if (book.Title.Trim().Length == 0)
+                {
+                    _validationResult.AddError("Title", "Title can't be empty");
+                }
+                if(book.Authors.Count == 0)
+                {
+                    _validationResult.AddError("Authors", "Authors were not added");
+                }
             }
-            
+            else
+            {
+                _validationResult.AddError("Title", "Title of book is null");
+            }
             return _validationResult;
         }
     }

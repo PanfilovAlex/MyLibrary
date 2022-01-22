@@ -37,5 +37,11 @@ namespace WebApiMyLib.Controllers
         {
             return _categoryService.Update(category);
         }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            _categoryService.Delete(id);
+        }
     }
 }

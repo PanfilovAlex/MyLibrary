@@ -18,7 +18,7 @@ namespace WebApiMyLib.BLL.Tests
         [InlineData("Ада$м", "Фр$имен", false)]
         [InlineData("Ада:м", "Фримен", false)]
         [InlineData("Адам", "Фр$имен", false)]
-        
+
         public void ValidatAuthor(string firstName, string lastName, bool expectedResult)
         {
             //Arrange

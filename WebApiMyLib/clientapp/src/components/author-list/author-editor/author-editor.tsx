@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { Author } from "../../../models/author";
 
 export type AuthorEditorProps = {
@@ -21,7 +21,21 @@ export function AuthorEditor(props: AuthorEditorProps): JSX.Element {
     } = props;
 
     const [firstName, setFirstName] = useState(author?.firstName);
+    const [firstNameValidationMessage, setFirstNameValidationMessage] = useState<string>();
     const [lastName, setLastName] = useState(author?.lastName);
+    const [lastNameValidationMessage, setLastNameValidationMessage] = useState<string>();
+
+    const handleValidationMessage = useCallback((key: string, messages: string[]) => {
+        const keyToHandler = new Map([
+            ['First Name', setFirstNameValidationMessage],
+            ['Last Name', setLastNameValidationMessage],
+        ]);
+        const formattedMessage = messages.join(', \n');
+        const handler = keyToHandler.get(key);
+        if (handler) {
+            handler(formattedMessage);
+        }
+    }, [setFirstNameValidationMessage, setLastNameValidationMessage]);
 
     const dialogTitle = useMemo(() => {
         return author ? 'Edit' : 'Create';
@@ -39,19 +53,34 @@ export function AuthorEditor(props: AuthorEditorProps): JSX.Element {
             firstName,
             lastName,
           }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            onSubmit && onSubmit(data as Author);
-          });
+        }).then(async (response) => {
+            return {
+                ok: response.ok,
+                status: response.status,
+                data: await response.json(),
+            };
+        }).then((result) => {
+            if (result.ok) {
+                onSubmit && onSubmit(result.data as Author);
+            } else if (result.status === 400) {
+                const messages = result.data.message;
+                Object.entries(messages).forEach(([k, v]) => handleValidationMessage(k, v as string[]));
+            } else {
+                return Promise.reject(result.data);
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
       };
 
     const onFirstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setFirstName(event.target.value);
+        setFirstNameValidationMessage(undefined);
     };
 
     const onLastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setLastName(event.target.value);
+        setLastNameValidationMessage(undefined);
     };
 
     return (
@@ -68,6 +97,8 @@ export function AuthorEditor(props: AuthorEditorProps): JSX.Element {
                     fullWidth
                     variant="standard"
                     value={firstName}
+                    error={!!firstNameValidationMessage}
+                    helperText={firstNameValidationMessage}
                     onChange={onFirstNameChange}
                 />
 
@@ -76,6 +107,8 @@ export function AuthorEditor(props: AuthorEditorProps): JSX.Element {
                     fullWidth
                     variant="standard"
                     value={lastName}
+                    error={!!lastNameValidationMessage}
+                    helperText={lastNameValidationMessage}
                     onChange={onLastNameChange}
                 />
             </DialogContent>

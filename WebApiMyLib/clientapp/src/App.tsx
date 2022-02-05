@@ -4,17 +4,21 @@ import {
     Route,
     Routes,
 } from 'react-router-dom';
-import './App.css';
 import { AuthorList } from './components/author-list/author-list';
 import { BookList } from './components/book-list/book-list';
 import { CategoryList } from './components/category-list/category-list';
 import NavTabs from './components/navigation-tabs/navigation-tabs';
+import './App.scss';
 
 function App() {
     return (
         <div className="App">
 
-            <Typography variant="h3" component="div" gutterBottom align="left">
+            <Typography
+                variant="h3"
+                component="div"
+                gutterBottom
+                align="left">
                 My Library
             </Typography>
 

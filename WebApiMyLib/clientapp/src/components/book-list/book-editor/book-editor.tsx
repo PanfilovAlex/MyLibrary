@@ -9,8 +9,7 @@ import { ChangeEvent, useMemo, useState } from 'react';
 import { Category } from '../../../models/category';
 import { Author } from '../../../models/author';
 import { BookAuthorListEditor } from '../book-author-list-editor/book-author-list-editor';
-// import styles from './book-editor.css';
-import clsx from 'clsx';
+import styles from './book-editor.module.scss';
 
 export type BookEditorProps = {
   book?: Book,
@@ -26,6 +25,7 @@ export function BookEditor(props: BookEditorProps): JSX.Element {
   } = props;
 
   const [title, setTitle] = useState<string>(book?.title ?? '');
+  const [titleValidationMessage, setTitleValidationMessage] = useState<string>();
   const [authors, setAuthors] = useState<Author[]>(book?.authors ?? []);
   const [categories, setCategories] = useState<Category[]>(book?.categories ?? []);
 
@@ -46,16 +46,29 @@ export function BookEditor(props: BookEditorProps): JSX.Element {
         authors,
         categories,
       }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        onSubmit && onSubmit(data as Book);
-      });
-      // TODO: add error handling
+    }).then(async (response) => {
+        return {
+          ok: response.ok,
+          status: response.status,
+          data: await response.json(),
+        };
+    }).then((result) => {
+        if (result.ok) {
+          onSubmit && onSubmit(result.data as Book);
+        } else if (result.status === 400) {
+          const titleMessage = (result.data.message['Title'] as []).join(',\n');
+          setTitleValidationMessage(titleMessage);
+        } else {
+          Promise.reject(result.data);
+        }
+    }).catch((error) => {
+      console.error(error);
+    });
   };
 
   const onTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
+    setTitleValidationMessage(undefined);
   }
 
   const onAuthorsChange = (authors: Author[]) => {
@@ -75,10 +88,12 @@ export function BookEditor(props: BookEditorProps): JSX.Element {
           fullWidth
           variant="standard"
           value={title}
+          error={!!titleValidationMessage}
+          helperText={titleValidationMessage}
           onChange={onTitleChange}
         />
         <BookAuthorListEditor
-          className="book-author-list-editor"
+          className={styles.bookAuthorListEditor}
           authors={authors}
           onChange={onAuthorsChange} />
       </DialogContent>

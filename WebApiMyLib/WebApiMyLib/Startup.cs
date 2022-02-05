@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Hosting;
-using WebApiMyLib.Data.Models;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.BLL.Services;
+using WebApiMyLib.Data.Models;
+using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Filters;
 
 
@@ -25,8 +24,9 @@ namespace WebApiMyLib
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<BookDbContext>(options => 
-            options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebApiMyLib")));
+            services.AddDbContext<BookDbContext>(options =>
+                options.UseSqlServer(connectionString, b => b.MigrationsAssembly("WebApiMyLib"))
+            );
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
             services.AddTransient<IAuthorService, AuthorService>();
@@ -34,10 +34,13 @@ namespace WebApiMyLib
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IValidationService<Category>, CategoryValidationService>();
-            services.AddTransient<IValidationService<Author>, AuthorValidationService >();
+            services.AddTransient<IValidationService<Author>, AuthorValidationService>();
             services.AddTransient<IValidationService<Book>, BookValidationService>();
-            services.AddControllers().AddNewtonsoftJson(options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers(options =>
+                options.Filters.Add<ExceptionFilter>()
+            ).AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddMvc();
 

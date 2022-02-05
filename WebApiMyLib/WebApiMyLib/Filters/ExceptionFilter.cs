@@ -11,9 +11,12 @@ namespace WebApiMyLib.Filters
         {
             if (context.Exception is ValidationException validationException)
             {
-                context.Result = new ObjectResult(validationException.Data)
+                context.Result = new ObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status400BadRequest 
+                    message = context.Exception.Data,
+                })
+                {
+                    StatusCode = StatusCodes.Status400BadRequest
                 };
             }
             context.ExceptionHandled = true;

@@ -4,7 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { Category } from "../../../models/category";
 
 export type CategoryEditorProps = {
@@ -21,6 +21,17 @@ export function CategoryEditor(props: CategoryEditorProps): JSX.Element {
   } = props;
 
   const [name, setName] = useState(category?.name);
+  const [nameValidationMessage, setNameValidationMessage] = useState<string>();
+
+  const handleValidationMessage = useCallback((key: string, messages: string[]) => {
+    const keyToHandler = new Map([
+      ['Name', setNameValidationMessage],
+    ]);
+    const handler = keyToHandler.get(key);
+    if (handler) {
+      handler(messages.join(', \n'));
+    }
+  }, [setNameValidationMessage]);
 
   const dialogTitle = useMemo(() => {
     return category ? 'Edit' : 'Create';
@@ -37,15 +48,29 @@ export function CategoryEditor(props: CategoryEditorProps): JSX.Element {
         id: category?.id,
         name,
       }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        onSubmit && onSubmit(data as Category);
-      });
+    }).then(async (response) => {
+      return {
+          ok: response.ok,
+          status: response.status,
+          data: await response.json(),
+      };
+    }).then((result) => {
+      if (result.ok) {
+        onSubmit && onSubmit(result.data as Category);
+      } else if (result.status === 400) {
+          const messages = result.data.message;
+          Object.entries(messages).forEach(([k, v]) => handleValidationMessage(k, v as string[]));
+      } else {
+          return Promise.reject(result.data);
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
   };
 
 const onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
+    setNameValidationMessage(undefined);
 };
 
   return (
@@ -59,6 +84,8 @@ const onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
           fullWidth
           variant="standard"
           value={name}
+          error={!!nameValidationMessage}
+          helperText={nameValidationMessage}
           onChange={onNameChange}
         />
       </DialogContent>

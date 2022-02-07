@@ -15,11 +15,23 @@ namespace WebApiMyLib.Data.Repositories
                serviceProvider.GetRequiredService<
                    DbContextOptions<BookDbContext>>()))
             {
+                if(!bookDbContext.Users.Any())
+                {
+                    User admin = new User
+                    {
+                        UserName = "admin",
+                        Password = "1234",
+                        Role = "admin"
+                    };
+                    bookDbContext.Users.Add(admin);
+                    bookDbContext.SaveChanges();
+                }
                 // Look for any movies.
                 if (bookDbContext.Books.Any())
                 {
                     return;   // DB has been seeded
                 }
+                
                 Author autor1 = new Author { FirstName = "Адам", LastName = "Фримен" };
                 Author autor2 = new Author { FirstName = "Джон Поль", LastName = "Мюллер" };
                 Author autor3 = new Author { FirstName = "Лука", LastName = "Массарон" };
@@ -99,7 +111,7 @@ namespace WebApiMyLib.Data.Repositories
                 bookDbContext.Books.Add(book2);
                 bookDbContext.Books.Add(book3);
                 bookDbContext.Books.Add(book4);
-
+             
                 bookDbContext.SaveChanges();
             }
         }

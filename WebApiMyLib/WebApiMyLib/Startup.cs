@@ -57,6 +57,8 @@ namespace WebApiMyLib
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -96,9 +98,10 @@ namespace WebApiMyLib
             });
             app.UseStaticFiles();
             app.UseRouting();
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            // app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
 
             app.UseEndpoints(endpoints =>

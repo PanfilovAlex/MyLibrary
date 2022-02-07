@@ -49,7 +49,7 @@ namespace WebApiMyLib.Controllers
                 if(generetedToken != null)
                 {
                     HttpContext.Session.SetString("Token", generetedToken);
-                    return RedirectToPage("/api/book");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

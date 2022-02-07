@@ -43,7 +43,7 @@ namespace WebApiMyLib.Controllers
             return Ok(bookDto);
         }
 
-        [Authorize(Roles ="admin")]
+        [Authorize]
         [HttpPost]
         public ActionResult<Book> Post([FromBody] Book book)
         {

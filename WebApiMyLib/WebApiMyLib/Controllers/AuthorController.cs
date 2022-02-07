@@ -5,10 +5,13 @@ using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Models;
 using WebApiMyLib.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApiMyLib.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
     public class AuthorController : ControllerBase
     {
         private IAuthorService _authorService;
@@ -19,37 +22,38 @@ namespace WebApiMyLib.Controllers
         public ActionResult<IEnumerable<AuthorDto>> Get([FromQuery] BookPageParameters pageParameters)
         {
             var authors = _authorService.Authors(pageParameters);
-            return authors.Select(autor => ConvertToAuthorDto(autor)).ToList();       
+            return authors.Select(autor => ConvertToAuthorDto(autor)).ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<AuthorDto> Get(int id)
         {
             var autor = _authorService.Find(id);
-            if(autor == null)
+            if (autor == null)
             {
                 return BadRequest();
             }
             return ConvertToAuthorDto(autor);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
-        public ActionResult<Author> Post([FromBody]Author author)
+        public ActionResult<Author> Post([FromBody] Author author)
         {
             var adeddAuthor = _authorService.Add(author);
             if (adeddAuthor == null)
             {
                 return BadRequest();
             }
-            
+
             return Ok(ConvertToAuthorDto(adeddAuthor));
         }
 
         [HttpPut]
-        public ActionResult<Author> Put([FromBody]Author author)
+        public ActionResult<Author> Put([FromBody] Author author)
         {
             var updatedAuthor = _authorService.Update(author);
-            if(updatedAuthor == null)
+            if (updatedAuthor == null)
             {
                 return BadRequest();
             }

@@ -6,6 +6,7 @@ using WebApiMyLib.Models;
 using Microsoft.EntityFrameworkCore;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApiMyLib.Controllers
 {
@@ -42,6 +43,7 @@ namespace WebApiMyLib.Controllers
             return Ok(bookDto);
         }
 
+        [Authorize(Roles ="admin")]
         [HttpPost]
         public ActionResult<Book> Post([FromBody] Book book)
         {

@@ -9,6 +9,7 @@ using WebApiMyLib.BLL.Interfaces;
 namespace WebApiMyLib.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class AuthorController : ControllerBase
     {
         private IAuthorService _authorService;
@@ -33,6 +34,7 @@ namespace WebApiMyLib.Controllers
             return ConvertToAuthorDto(autor);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public ActionResult<Author> Post([FromBody]Author author)
         {
@@ -45,11 +47,12 @@ namespace WebApiMyLib.Controllers
             return Ok(ConvertToAuthorDto(adeddAuthor));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public ActionResult<Author> Put([FromBody]Author author)
         {
             var updatedAuthor = _authorService.Update(author);
-            if(updatedAuthor == null)
+            if (updatedAuthor == null)
             {
                 return BadRequest();
             }
@@ -57,6 +60,7 @@ namespace WebApiMyLib.Controllers
             return Ok(updatedAuthor);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

@@ -5,6 +5,7 @@ using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Models;
 using WebApiMyLib.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApiMyLib.Controllers
 {

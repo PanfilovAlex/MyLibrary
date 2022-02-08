@@ -11,7 +11,6 @@ namespace WebApiMyLib.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AuthorController : ControllerBase
     {
         private IAuthorService _authorService;
@@ -49,6 +48,7 @@ namespace WebApiMyLib.Controllers
             return Ok(ConvertToAuthorDto(adeddAuthor));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public ActionResult<Author> Put([FromBody] Author author)
         {
@@ -61,6 +61,7 @@ namespace WebApiMyLib.Controllers
             return Ok(updatedAuthor);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

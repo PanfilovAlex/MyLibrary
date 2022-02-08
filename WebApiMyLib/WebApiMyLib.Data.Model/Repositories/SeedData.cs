@@ -11,11 +11,10 @@ namespace WebApiMyLib.Data.Repositories
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var bookDbContext = new BookDbContext(
-               serviceProvider.GetRequiredService<
-                   DbContextOptions<BookDbContext>>()))
+            using (var bookDbContext = 
+                new BookDbContext(serviceProvider.GetRequiredService<DbContextOptions<BookDbContext>>()))
             {
-                if(!bookDbContext.Users.Any())
+                if (!bookDbContext.Users.Any())
                 {
                     User admin = new User
                     {

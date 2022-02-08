@@ -8,7 +8,7 @@ namespace WebApiMyLib.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    [Authorize]
+
     public class CategoryController : ControllerBase
     {
         private ICategoryService _categoryService;
@@ -29,12 +29,14 @@ namespace WebApiMyLib.Controllers
             return _categoryService.Find(id);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public Category Post([FromBody] Category category)
         {
             return _categoryService.Add(category);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public Category Put([FromBody] Category category)
         {

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Models;
 using WebApiMyLib.BLL.Interfaces;

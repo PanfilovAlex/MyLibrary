@@ -1,4 +1,4 @@
-﻿namespace WebApiMyLib.Data.Models
+﻿namespace WebApiMyLib.Models
 {
     public class UserModel
     {

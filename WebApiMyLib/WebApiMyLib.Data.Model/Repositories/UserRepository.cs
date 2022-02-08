@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebApiMyLib.Data.Models;
 
 namespace WebApiMyLib.Data.Repositories
@@ -14,15 +11,6 @@ namespace WebApiMyLib.Data.Repositories
         public UserRepository(BookDbContext userRepository)
         {
             _userRepository = userRepository;
-            if (!_userRepository.Users.Any())
-            {
-                _userRepository.Add(new User
-                {
-                    UserName = "Admin",
-                    Password = "1234",
-                    Role = "admin"
-                });
-            }
         }
 
         public User Add(User user)

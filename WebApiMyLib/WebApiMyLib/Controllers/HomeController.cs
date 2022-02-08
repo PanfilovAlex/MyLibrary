@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApiMyLib.Data.Repositories;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.BLL.Interfaces;
 

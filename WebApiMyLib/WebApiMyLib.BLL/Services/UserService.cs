@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebApiMyLib.BLL.Interfaces;
+﻿using WebApiMyLib.BLL.Interfaces;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.Data.Repositories;
 

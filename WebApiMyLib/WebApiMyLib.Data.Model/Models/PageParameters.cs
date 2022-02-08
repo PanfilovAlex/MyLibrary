@@ -1,6 +1,4 @@
-﻿
-
-namespace WebApiMyLib.Data.Models
+﻿namespace WebApiMyLib.Data.Models
 {
     public class PageParameters
     {

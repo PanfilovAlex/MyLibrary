@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApiMyLib.Models;
 using Microsoft.EntityFrameworkCore;
+using WebApiMyLib.Models;
 using WebApiMyLib.Data.Models;
 using WebApiMyLib.BLL.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebApiMyLib.Controllers
 {

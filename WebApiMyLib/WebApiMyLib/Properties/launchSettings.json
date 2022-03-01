@@ -12,14 +12,14 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "Home",
+      "launchUrl": "books",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "WebApiMyLib": {
       "commandName": "Project",
-      "launchUrl": "Home",
+      "launchUrl": "books",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

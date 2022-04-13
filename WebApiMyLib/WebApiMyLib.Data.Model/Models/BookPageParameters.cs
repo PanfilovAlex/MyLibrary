@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApiMyLib.Data.Models
 {
-    public class BookPageParameters : PageParameters
+    public class BookPageParameters : RequestParameters
     {
         public string SearchString { get; set; }
         public string SortBy { get; set; }

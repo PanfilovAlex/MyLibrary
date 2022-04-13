@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using NLog;
+using System.IO;
+using WebApiMyLib.Extensions;
 
 namespace WebApiMyLib
 {
@@ -22,6 +25,7 @@ namespace WebApiMyLib
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
         public IConfiguration Configuration { get; }
@@ -33,6 +37,8 @@ namespace WebApiMyLib
 
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
+            services.ConfigureLoggerService();
+
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -100,8 +106,6 @@ namespace WebApiMyLib
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
-
-            // app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
 
             app.UseEndpoints(endpoints =>

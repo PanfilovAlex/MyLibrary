@@ -13,43 +13,51 @@ namespace WebApiMyLib.Controllers
     public class AuthorController : ControllerBase
     {
         private IAuthorService _authorService;
-
-        public AuthorController(IAuthorService authorService) => _authorService = authorService;
+        private ILoggerManager _loggerManager;
+        public AuthorController(IAuthorService authorService, ILoggerManager logger)
+        {
+            _authorService = authorService;
+            _loggerManager = logger;
+        }
 
         [HttpGet]
         public ActionResult<IEnumerable<AuthorDto>> Get([FromQuery] BookPageParameters pageParameters)
         {
+            _loggerManager.Info("Testing logger");
             var authors = _authorService.Authors(pageParameters);
-            return authors.Select(autor => ConvertToAuthorDto(autor)).ToList();       
+            return authors.Select(autor => ConvertToAuthorDto(autor)).ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<AuthorDto> Get(int id)
         {
             var autor = _authorService.Find(id);
-            if(autor == null)
+            if (autor == null)
             {
                 return BadRequest();
             }
             return ConvertToAuthorDto(autor);
+
+
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public ActionResult<Author> Post([FromBody]Author author)
+        public ActionResult<Author> Post([FromBody] Author author)
         {
+            _loggerManager.Info("Testing logger");
             var adeddAuthor = _authorService.Add(author);
             if (adeddAuthor == null)
             {
                 return BadRequest();
             }
-            
+
             return Ok(ConvertToAuthorDto(adeddAuthor));
         }
 
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public ActionResult<Author> Put([FromBody]Author author)
+        public ActionResult<Author> Put([FromBody] Author author)
         {
             var updatedAuthor = _authorService.Update(author);
             if (updatedAuthor == null)

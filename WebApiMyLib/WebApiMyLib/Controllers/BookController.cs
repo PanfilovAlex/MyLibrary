@@ -27,7 +27,7 @@ namespace WebApiMyLib.Controllers
         {
             var books = _bookService.Books(pageParameters);
                         
-            return new PagedListDto<BookDto>(books.Select((b) => ConvertToBookDto(b)).ToList(), books.TotalCount);
+            return new PagedListDto<BookDto>(books.Select((b) => ConvertToBookDto(b)).ToList(), books.MetaData.TotalCount);
         }
 
         [HttpGet("{id}")]
